@@ -16,7 +16,8 @@ const initialState = {
 export const ACTIONS = {
   LOADING_STATE: "loading state",
   SEARCH_JOB_BY_KEY_WORDS : "search_job_by_key_words",
-  SEARCH_JOB_BY_LOCATION : "search_job_by_loaction"
+  SEARCH_JOB_BY_LOCATION : "search_job_by_loaction",
+  SEARCH_JOB_BY_GIVEN_LOCATION : "search_job_by_given_loaction",
 }
 
 const API_URL = "https://jobs.github.com/"
@@ -42,6 +43,14 @@ function reducer(state, action) {
         ...state,
         description : '',
         location: action.foundJobsByLocation
+      }
+    }
+    case ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION: {
+      console.log(action.foundJobsByGivenLocation);
+      return {
+        ...state,
+        description : '',
+        location: action.foundJobsByGivenLocation
       }
     }
     default: {
