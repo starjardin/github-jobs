@@ -3,25 +3,41 @@ import axios from 'axios'
 
 const GlobalContext = createContext()
 const initialState = {
-  description: "",
+  description: "python",
   location: "new york",
   lat: "",
   long: "",
   full_time: true,
-  jobs : []
+  jobs: [],
+  loading: true,
+  error : ""
 }
-const ACTIONS = {
-  LOADING_STATE : "loading state"
+
+export const ACTIONS = {
+  LOADING_STATE: "loading state",
+  SEARCH_JOB_BY_KEY_WORDS : "search_job_by_key_words"
 }
 
 const API_URL = "https://jobs.github.com/"
-const RUN_TIME = "positions.json?description=python&full_time=true&location=sf"
 const  CORS_KEY = "https://cors-anywhere.herokuapp.com/"
 
 function reducer(state, action) {
   switch (action.type) {
-    case ACTIONS.LOADING_STATE: {
-      
+    case ACTIONS.LOADING_STATE : {
+      return {
+        ...state,
+        jobs: action.payload,
+        loading : false
+      }
+    }
+    case ACTIONS.SEARCH_JOB_BY_KEY_WORDS : {
+      return {
+        ...state,
+        description : action.foundJobsByKeyWords
+      }
+    }
+    default: {
+      return state
     }
   }
 }
@@ -29,18 +45,29 @@ function reducer(state, action) {
 
 function JobsContextProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
-  async function getJobsData() {
-    const jobsData = fetch(CORS_KEY + API_URL)
-    console.log(jobsData);
-    console.log("Hello world");
+
+  function getJobsData() {
+    axios
+      .get(CORS_KEY + API_URL + `positions.json?description=${state.description}&location=${state.location}`)
+      .then(response => {
+        dispatch({ type: ACTIONS.LOADING_STATE, payload : response.data })
+      })
+      .catch(error => {
+        dispatch({type : "FETCH_ERROR" })
+      })
   }
 
   useEffect(() => {
     getJobsData()
-    // dispatch({type : "LOADING_STATE"})
   }, [])
+
+  useEffect(() => {
+    getJobsData()
+  }, [state.description])
+
+  console.log(state);
   return (
-    <GlobalContext.Provider value={{state, dispatch, test : "test"}}>
+    <GlobalContext.Provider value={{state, dispatch }}>
       { children }
     </GlobalContext.Provider>
   )

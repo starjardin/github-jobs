@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { GlobalContext } from '../context/JobsContext'
+import Search from './Search';
 
 export default function HomePage() {
+  const { state, dispatch } = useContext(GlobalContext)
+
   return (
-    <h2>
-      Hello world!!!, I am the home page👋
-    </h2>
+    <>
+      <div>
+        <Search />
+      </div>
+    </>
   )
 }
