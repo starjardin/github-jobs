@@ -1,12 +1,22 @@
 import React, { useContext, useState } from 'react'
+import styled from 'styled-components'
 
 import { GlobalContext, ACTIONS } from '../context/JobsContext'
+
+const FormStyles = styled.form`
+  .inputs {
+    display : flex;
+    flex-direction : row-reverse;
+    justify-content : flex-end;
+    align-items : center;
+  }
+`
 
 export default function SearchJobsByLocation() {
   const [jobsByLocation, setJobsByLocation] = useState('')
   const [jobsByGivenLocation, setJobsByGivenLocation] = useState('')
   const { state, dispatch } = useContext(GlobalContext)
-
+  const cities = ["london", "San Fransisco", "Berlin", "new york"]
   function handleSearchJobsByLocation(e) {
     e.preventDefault()
     dispatch({type : ACTIONS.SEARCH_JOB_BY_LOCATION, foundJobsByLocation : jobsByLocation})
@@ -19,45 +29,25 @@ export default function SearchJobsByLocation() {
   }
 
   return (
-    <form onSubmit={handleSearchJobsByLocation}>
+    <FormStyles onSubmit={handleSearchJobsByLocation}>
       <input
         name="searchJob"
         value={jobsByLocation}
         onChange={(e) => setJobsByLocation(e.target.value)}
       />
       <button>Search</button>
-      <label htmlFor="london">London</label>
-      <input
-        id="london"
-        type="checkbox"
-        name="searchJobByCity"
-        value="london"
-        onChange={handleSearchJobsByGivenLoaction}
-      />
-      <label htmlFor="london">New York</label>
-      <input
-        id="london"
-        type="checkbox"
-        name="searchJobByCity"
-        value="new york"
-        onChange={handleSearchJobsByGivenLoaction}
-      />
-      <label htmlFor="london">Berlin</label>
-      <input
-        id="london"
-        type="checkbox"
-        name="searchJobByCity"
-        value="berlin"
-        onChange={handleSearchJobsByGivenLoaction}
-      />
-      <label htmlFor="london">San Francisco</label>
-      <input
-        id="london"
-        type="checkbox"
-        name="searchJobByCity"
-        value="san francisco"
-        onChange={handleSearchJobsByGivenLoaction}
-      />
-    </form>
+      {cities.map((city, index) => (
+        <div className="inputs" key={index}>
+          <label htmlFor={city}>{ city }</label>
+          <input
+            id={city}
+            type="checkbox"
+            name="searchJobByCity"
+            value={city}
+            onChange={handleSearchJobsByGivenLoaction}
+          />
+        </div>
+      ))}
+    </FormStyles>
   )
 }
