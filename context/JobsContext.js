@@ -21,7 +21,7 @@ export const ACTIONS = {
 }
 
 const API_URL = "https://jobs.github.com/"
-const  CORS_KEY = "https://cors-anywhere.herokuapp.com/"
+const CORS_KEY = "https://cors-anywhere.herokuapp.com/"
 
 function reducer(state, action) {
   switch (action.type) {

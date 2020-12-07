@@ -8,7 +8,23 @@ const FormSearchByKeyWords = styled.form`
   justify-content : space-between;
   align-items : center;
   background-color : #fff;
-  width : 100%;
+  width : 85vw;
+  margin : auto;
+  padding-block : 1rem;
+  margin-bottom : 2rem;
+  input {
+    width : 100%;
+    border : none;
+    padding : 1rem;
+  }
+
+  button {
+    margin : 0 2rem;
+    padding : 0.7rem 1.2rem;
+    background-color : #1E86FF;
+    border : none;
+    border-radius : 5px;
+  }
 `
 
 export default function SearchJobsByKeyWords() {
@@ -23,8 +39,10 @@ export default function SearchJobsByKeyWords() {
   
   return (
     <FormSearchByKeyWords onSubmit={handleSearchSubmit}>
+
       <input
         name="searchJob"
+        placeholder="title, companies, expertise"
         value={jobsByKeyWords}
         onChange={(e) => setJobsByKeyWords(e.target.value)}
       />
