@@ -35670,7 +35670,8 @@ const initialState = {
 };
 const ACTIONS = {
   LOADING_STATE: "loading state",
-  SEARCH_JOB_BY_KEY_WORDS: "search_job_by_key_words"
+  SEARCH_JOB_BY_KEY_WORDS: "search_job_by_key_words",
+  SEARCH_JOB_BY_LOCATION: "search_job_by_loaction"
 };
 exports.ACTIONS = ACTIONS;
 const API_URL = "https://jobs.github.com/";
@@ -35690,6 +35691,14 @@ function reducer(state, action) {
       {
         return { ...state,
           description: action.foundJobsByKeyWords
+        };
+      }
+
+    case ACTIONS.SEARCH_JOB_BY_LOCATION:
+      {
+        return { ...state,
+          description: '',
+          location: action.foundJobsByLocation
         };
       }
 
@@ -35724,6 +35733,9 @@ function JobsContextProvider({
   (0, _react.useEffect)(() => {
     getJobsData();
   }, [state.description]);
+  (0, _react.useEffect)(() => {
+    getJobsData();
+  }, [state.location]);
   console.log(state);
   return /*#__PURE__*/_react.default.createElement(GlobalContext.Provider, {
     value: {
@@ -35761,6 +35773,7 @@ function SearchJobsByKeyWords() {
       type: _JobsContext.ACTIONS.SEARCH_JOB_BY_KEY_WORDS,
       foundJobsByKeyWords: jobsByKeyWords
     });
+    setJobsByKeyWords('');
   }
 
   return /*#__PURE__*/_react.default.createElement("form", {
@@ -35769,6 +35782,45 @@ function SearchJobsByKeyWords() {
     name: "searchJob",
     value: jobsByKeyWords,
     onChange: e => setJobsByKeyWords(e.target.value)
+  }), /*#__PURE__*/_react.default.createElement("button", null, "Search"));
+}
+},{"react":"node_modules/react/index.js","../context/JobsContext":"context/JobsContext.js"}],"components/SearchJobsByLocation.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = SearchJobsByLocation;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _JobsContext = require("../context/JobsContext");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function SearchJobsByLocation() {
+  const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
+  const {
+    state,
+    dispatch
+  } = (0, _react.useContext)(_JobsContext.GlobalContext);
+
+  function handleSearchJobsByLocation(e) {
+    e.preventDefault();
+    dispatch({
+      type: _JobsContext.ACTIONS.SEARCH_JOB_BY_LOCATION,
+      foundJobsByLocation: jobsByLocation
+    });
+  }
+
+  return /*#__PURE__*/_react.default.createElement("form", {
+    onSubmit: handleSearchJobsByLocation
+  }, /*#__PURE__*/_react.default.createElement("input", {
+    name: "searchJob",
+    value: jobsByLocation,
+    onChange: e => setJobsByLocation(e.target.value)
   }), /*#__PURE__*/_react.default.createElement("button", null, "Search"));
 }
 },{"react":"node_modules/react/index.js","../context/JobsContext":"context/JobsContext.js"}],"components/Search.js":[function(require,module,exports) {
@@ -35783,12 +35835,14 @@ var _react = _interopRequireDefault(require("react"));
 
 var _SearchJobsByKeyWords = _interopRequireDefault(require("./SearchJobsByKeyWords"));
 
+var _SearchJobsByLocation = _interopRequireDefault(require("./SearchJobsByLocation"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Search() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null));
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null), /*#__PURE__*/_react.default.createElement(_SearchJobsByLocation.default, null));
 }
-},{"react":"node_modules/react/index.js","./SearchJobsByKeyWords":"components/SearchJobsByKeyWords.js"}],"components/HomePage.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./SearchJobsByKeyWords":"components/SearchJobsByKeyWords.js","./SearchJobsByLocation":"components/SearchJobsByLocation.js"}],"components/HomePage.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

@@ -8,7 +8,8 @@ export default function SearchJobsByKeyWords() {
 
   function handleSearchSubmit(e) {
     e.preventDefault()
-    dispatch({ type: ACTIONS.SEARCH_JOB_BY_KEY_WORDS, foundJobsByKeyWords : jobsByKeyWords })
+    dispatch({ type: ACTIONS.SEARCH_JOB_BY_KEY_WORDS, foundJobsByKeyWords: jobsByKeyWords })
+    setJobsByKeyWords('')
   }
   
   return (
