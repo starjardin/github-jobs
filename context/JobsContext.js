@@ -7,6 +7,7 @@ const initialState = {
   location: "new york",
   lat: "",
   long: "",
+  search: "",
   full_time: true,
   jobs: [],
   loading: true,
@@ -36,14 +37,16 @@ function reducer(state, action) {
     case ACTIONS.SEARCH_JOB_BY_KEY_WORDS : {
       return {
         ...state,
-        description : action.foundJobsByKeyWords
+        search: action.foundJobsByKeyWords,
+        loading : false
       }
     }
     case ACTIONS.SEARCH_JOB_BY_LOCATION: {
       return {
         ...state,
         description : '',
-        location: action.foundJobsByLocation
+        location: action.foundJobsByLocation,
+        loading : false
       }
     }
     case ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION: {
@@ -51,7 +54,8 @@ function reducer(state, action) {
       return {
         ...state,
         description : '',
-        location: action.foundJobsByGivenLocation
+        location: action.foundJobsByGivenLocation,
+        loading : false
       }
     }
     default: {
@@ -75,6 +79,17 @@ function JobsContextProvider({ children }) {
       })
   }
 
+  function getJobsDataByKeyWords() {
+    axios
+      .get(CORS_KEY + API_URL + `positions.json?search=${state.search}`)
+      .then(response => {
+        dispatch({ type: ACTIONS.LOADING_STATE, payload : response.data })
+      })
+      .catch(error => {
+        dispatch({type : "FETCH_ERROR" })
+      })
+  }
+
   useEffect(() => {
     getJobsData()
   }, [])
@@ -87,7 +102,10 @@ function JobsContextProvider({ children }) {
     getJobsData()
   }, [state.location])
 
-  console.log(state);
+  useEffect(() => {
+    getJobsDataByKeyWords()
+    console.log(state);
+  }, [state.search])
   return (
     <GlobalContext.Provider value={{state, dispatch }}>
       { children }

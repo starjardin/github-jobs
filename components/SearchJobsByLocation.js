@@ -29,25 +29,27 @@ export default function SearchJobsByLocation() {
   }
 
   return (
-    <FormStyles onSubmit={handleSearchJobsByLocation}>
-      <input
-        name="searchJob"
-        value={jobsByLocation}
-        onChange={(e) => setJobsByLocation(e.target.value)}
-      />
-      <button>Search</button>
-      {cities.map((city, index) => (
-        <div className="inputs" key={index}>
-          <label htmlFor={city}>{ city }</label>
-          <input
-            id={city}
-            type="checkbox"
-            name="searchJobByCity"
-            value={city}
-            onChange={handleSearchJobsByGivenLoaction}
-          />
-        </div>
-      ))}
-    </FormStyles>
+    <>
+      <FormStyles onSubmit={handleSearchJobsByLocation}>
+        <input
+          name="searchJob"
+          value={jobsByLocation}
+          onChange={(e) => setJobsByLocation(e.target.value)}
+        />
+        <button>Search</button>
+        {cities.map((city, index) => (
+          <div className="inputs" key={index}>
+            <label htmlFor={city}>{ city }</label>
+            <input
+              id={city}
+              type="checkbox"
+              name="searchJobByCity"
+              value={city}
+              onChange={handleSearchJobsByGivenLoaction}
+            />
+          </div>
+        ))}
+        </FormStyles>
+      </>
   )
 }

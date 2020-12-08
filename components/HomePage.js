@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 
 import { GlobalContext } from '../context/JobsContext'
+import FullTimeJobSearch from './FullTimeJobSearch'
 import JobLists from './JobLists'
 import SearchJobsByKeyWords from './SearchJobsByKeyWords'
 import SearchJobsByLocation from './SearchJobsByLocation'
@@ -23,6 +24,7 @@ export default function HomePage () {
   return (
     <>
       <SearchJobsByKeyWords />
+      <FullTimeJobSearch />
       <MainStyles>
         <SearchJobsByLocation className="search"/>
         <div className="jobLists">

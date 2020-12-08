@@ -14,11 +14,6 @@ const JobListsStyles = styled.ul`
     margin-block : 1rem;
     display : flex;
   }
-
-  .jobDescription {
-    flex-basis : 70%;
-  }
-
   .company_logo {
     flex-basis : 30%;
   }
