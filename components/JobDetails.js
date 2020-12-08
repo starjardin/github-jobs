@@ -9,7 +9,7 @@ import JobDetailsStyles from './styles/JobDetailsStyles'
 import { API_URL, CORS_KEY } from '../context/JobsContext'
 
 export default function JobDetails() {
-  const [singleJobDetaijs, setSingleJobDetails] = useState({})
+  const [singleJobDetails, setSingleJobDetails] = useState({})
   const { jobId } = useParams()
 
   function getJobsData() {
@@ -22,11 +22,11 @@ export default function JobDetails() {
 
   useEffect(() => {
     getJobsData()
-  }, [ jobId ])
+  }, [])
 
   return (
-    <JobDetailsContextProvider singleJobDetaijs={singleJobDetaijs}>
-      {!singleJobDetaijs.title
+    <JobDetailsContextProvider singleJobDetails={singleJobDetails}>
+      {!singleJobDetails.title
         ? <h2>Loading...</h2>
         : <JobDetailsStyles>
             <div>
@@ -45,10 +45,10 @@ export default function JobDetails() {
 
 const JobDetailsContext = createContext()
 
-function JobDetailsContextProvider({ children, singleJobDetaijs }) {
+function JobDetailsContextProvider({ children, singleJobDetails }) {
   return (
     <JobDetailsContext.Provider
-      value={{ singleJobDetaijs }}
+      value={{ singleJobDetails }}
     >
       {children}
     </JobDetailsContext.Provider>
@@ -56,19 +56,38 @@ function JobDetailsContextProvider({ children, singleJobDetaijs }) {
 }
 
 function JobHeader () {
-  const { singleJobDetaijs } = useContext(JobDetailsContext)
+  const { singleJobDetails } = useContext(JobDetailsContext)
+  const date = new Date(singleJobDetails.created_at)
+  const time = date.getTime()
+  const timeNow = Date.now()
+  const timeDifference = timeNow - time
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`
+  if (dateDifference < 1) {
+    dateDifference  = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`
+  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
+    dateDifference = Math.round(timeDifference * (1000 * 60)) ` minutes ago`
+  } else if (dateDifference > 1 || dateDifference < 31) {
+    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30)) ` months ago`
+  }
+
   return (
     <>
-      <h2>
-        {singleJobDetaijs.title} <button>{singleJobDetaijs.type}</button>
-      </h2>
+      <div>
+        <h2>
+          {singleJobDetails.title} <button>{singleJobDetails.type}</button>
+        </h2>
+        <div className="clock-container">
+          <BsClock />
+          <small>{ dateDifference }</small>
+        </div>
+      </div>
       <div className="company_logo">
-        <img src={singleJobDetaijs.company_logo} />
+        <img src={singleJobDetails.company_logo} />
         <div>
-          <h4>{singleJobDetaijs.company}</h4>
+          <h4>{singleJobDetails.company}</h4>
           <div className="icon">
             <IoMdGlobe />
-            <small>{singleJobDetaijs.location}</small>
+            <small>{singleJobDetails.location}</small>
           </div>
         </div>
       </div>
@@ -77,20 +96,20 @@ function JobHeader () {
 }
 
 function HowToApply() {
-  const { singleJobDetaijs } = useContext(JobDetailsContext)
+  const { singleJobDetails } = useContext(JobDetailsContext)
   return (
     <>
       <h4 className="howToApply">How to apply</h4>
-      <p>{singleJobDetaijs?.how_to_apply}</p>
+      <p>{singleJobDetails?.how_to_apply}</p>
     </>
   )
 }
 
 function Description() {
-  const { singleJobDetaijs } = useContext(JobDetailsContext)
+  const { singleJobDetails } = useContext(JobDetailsContext)
   return (
     <>
-      {singleJobDetaijs?.description}
+      {singleJobDetails?.description}
     </>
   )
 }

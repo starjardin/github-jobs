@@ -22,13 +22,14 @@ const MainStyles = styled.div`
 export default function HomePage () {
   const { state } = useContext(GlobalContext)
   const { jobs, loading } = state
+  
   return (
     <>
       <SearchJobsByKeyWords />
       <MainStyles>
         <SearchJobsByLocation className="search"/>
         <div className="jobLists">
-          {loading
+          {!jobs.length
             ? <h2>Loading...</h2>
             :  jobs.map((job, index) => (
               <JobLists key={index} job={ job }/>

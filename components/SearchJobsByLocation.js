@@ -11,6 +11,10 @@ const FormStyles = styled.form`
     flex-direction : row-reverse;
     justify-content : flex-end;
     align-items : center;
+    gap : .3rem;
+    label {
+      text-transform : capitalize
+    }
   }
   [type="text"] {
     padding : .6rem;

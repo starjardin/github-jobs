@@ -16,14 +16,15 @@ const JobDetailsStyles = styled.div`
     color : #1E86FF;
     padding-bottom : 3rem;
   }
-  .backToHome, .company_logo, .icon {
+  .backToHome, .company_logo, .icon, .clock-container {
     display : flex;
     gap : 1rem;
-    align-items : cemter;
+    align-items : center;
     h4 {
       margin : 0;
       transform : translateY(-7px) 
     }
+    
     small {
       font-weight: 500;
       font-size: 12px;
@@ -36,7 +37,11 @@ const JobDetailsStyles = styled.div`
   }
   
   h2 {
-    padding-block : 2rem;
+    padding-top : 2rem;
+  }
+
+  .clock-container {
+    padding-bottom : 2rem;
   }
 
   .howToApply {

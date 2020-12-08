@@ -7,7 +7,7 @@ const initialState = {
   location: "new york",
   lat: "",
   long: "",
-  search: "",
+  search: "code",
   full_time: false,
   jobs: [],
   loading: true,
@@ -117,7 +117,6 @@ function JobsContextProvider({ children }) {
 
   useEffect(() => {
     getJobsData()
-    console.log(state);
   }, [])
 
   useEffect(() => {

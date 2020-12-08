@@ -37402,7 +37402,7 @@ const initialState = {
   location: "new york",
   lat: "",
   long: "",
-  search: "",
+  search: "code",
   full_time: false,
   jobs: [],
   loading: true,
@@ -37528,7 +37528,6 @@ function JobsContextProvider({
 
   (0, _react.useEffect)(() => {
     getJobsData();
-    console.log(state);
   }, []);
   (0, _react.useEffect)(() => {
     getJobsData();
@@ -68955,6 +68954,10 @@ const FormStyles = _styledComponents.default.form`
     flex-direction : row-reverse;
     justify-content : flex-end;
     align-items : center;
+    gap : .3rem;
+    label {
+      text-transform : capitalize
+    }
   }
   [type="text"] {
     padding : .6rem;
@@ -69096,7 +69099,7 @@ function HomePage() {
     className: "search"
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "jobLists"
-  }, loading ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : jobs.map((job, index) => /*#__PURE__*/_react.default.createElement(_JobLists.default, {
+  }, !jobs.length ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : jobs.map((job, index) => /*#__PURE__*/_react.default.createElement(_JobLists.default, {
     key: index,
     job: job
   })))));
@@ -89948,14 +89951,15 @@ const JobDetailsStyles = _styledComponents.default.div`
     color : #1E86FF;
     padding-bottom : 3rem;
   }
-  .backToHome, .company_logo, .icon {
+  .backToHome, .company_logo, .icon, .clock-container {
     display : flex;
     gap : 1rem;
-    align-items : cemter;
+    align-items : center;
     h4 {
       margin : 0;
       transform : translateY(-7px) 
     }
+    
     small {
       font-weight: 500;
       font-size: 12px;
@@ -89968,7 +89972,11 @@ const JobDetailsStyles = _styledComponents.default.div`
   }
   
   h2 {
-    padding-block : 2rem;
+    padding-top : 2rem;
+  }
+
+  .clock-container {
+    padding-bottom : 2rem;
   }
 
   .howToApply {
@@ -90019,7 +90027,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function JobDetails() {
-  const [singleJobDetaijs, setSingleJobDetails] = (0, _react.useState)({});
+  const [singleJobDetails, setSingleJobDetails] = (0, _react.useState)({});
   const {
     jobId
   } = (0, _reactRouterDom.useParams)();
@@ -90032,52 +90040,68 @@ function JobDetails() {
 
   (0, _react.useEffect)(() => {
     getJobsData();
-  }, [jobId]);
+  }, []);
   return /*#__PURE__*/_react.default.createElement(JobDetailsContextProvider, {
-    singleJobDetaijs: singleJobDetaijs
-  }, !singleJobDetaijs.title ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : /*#__PURE__*/_react.default.createElement(_JobDetailsStyles.default, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(GoBackToSearch, null), /*#__PURE__*/_react.default.createElement(HowToApply, null)), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(JobHeader, null), /*#__PURE__*/_react.default.createElement(Description, null))));
+    singleJobDetails: singleJobDetails
+  }, !singleJobDetails.title ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : /*#__PURE__*/_react.default.createElement(_JobDetailsStyles.default, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(GoBackToSearch, null), /*#__PURE__*/_react.default.createElement(HowToApply, null)), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(JobHeader, null), /*#__PURE__*/_react.default.createElement(Description, null))));
 }
 
 const JobDetailsContext = (0, _react.createContext)();
 
 function JobDetailsContextProvider({
   children,
-  singleJobDetaijs
+  singleJobDetails
 }) {
   return /*#__PURE__*/_react.default.createElement(JobDetailsContext.Provider, {
     value: {
-      singleJobDetaijs
+      singleJobDetails
     }
   }, children);
 }
 
 function JobHeader() {
   const {
-    singleJobDetaijs
+    singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h2", null, singleJobDetaijs.title, " ", /*#__PURE__*/_react.default.createElement("button", null, singleJobDetaijs.type)), /*#__PURE__*/_react.default.createElement("div", {
+  const date = new Date(singleJobDetails.created_at);
+  const time = date.getTime();
+  const timeNow = Date.now();
+  const timeDifference = timeNow - time;
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`;
+
+  if (dateDifference < 1) {
+    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`;
+  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
+    dateDifference = Math.round(timeDifference * (1000 * 60))` minutes ago`;
+  } else if (dateDifference > 1 || dateDifference < 31) {
+    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30))` months ago`;
+  }
+
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h2", null, singleJobDetails.title, " ", /*#__PURE__*/_react.default.createElement("button", null, singleJobDetails.type)), /*#__PURE__*/_react.default.createElement("div", {
+    className: "clock-container"
+  }, /*#__PURE__*/_react.default.createElement(_bs.BsClock, null), /*#__PURE__*/_react.default.createElement("small", null, dateDifference))), /*#__PURE__*/_react.default.createElement("div", {
     className: "company_logo"
   }, /*#__PURE__*/_react.default.createElement("img", {
-    src: singleJobDetaijs.company_logo
-  }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h4", null, singleJobDetaijs.company), /*#__PURE__*/_react.default.createElement("div", {
+    src: singleJobDetails.company_logo
+  }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h4", null, singleJobDetails.company), /*#__PURE__*/_react.default.createElement("div", {
     className: "icon"
-  }, /*#__PURE__*/_react.default.createElement(_io.IoMdGlobe, null), /*#__PURE__*/_react.default.createElement("small", null, singleJobDetaijs.location)))));
+  }, /*#__PURE__*/_react.default.createElement(_io.IoMdGlobe, null), /*#__PURE__*/_react.default.createElement("small", null, singleJobDetails.location)))));
 }
 
 function HowToApply() {
   const {
-    singleJobDetaijs
+    singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h4", {
     className: "howToApply"
-  }, "How to apply"), /*#__PURE__*/_react.default.createElement("p", null, singleJobDetaijs?.how_to_apply));
+  }, "How to apply"), /*#__PURE__*/_react.default.createElement("p", null, singleJobDetails?.how_to_apply));
 }
 
 function Description() {
   const {
-    singleJobDetaijs
+    singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, singleJobDetaijs?.description);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, singleJobDetails?.description);
 }
 
 function GoBackToSearch() {
@@ -90169,7 +90193,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58531" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65442" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
