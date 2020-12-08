@@ -21,8 +21,8 @@ export const ACTIONS = {
   SEARCH_JOB_BY_GIVEN_LOCATION : "search_job_by_given_loaction",
 }
 
-const API_URL = "https://jobs.github.com/"
-const CORS_KEY = "https://cors-anywhere.herokuapp.com/"
+export const API_URL = "https://jobs.github.com/"
+export const CORS_KEY = "https://cors-anywhere.herokuapp.com/"
 
 function reducer(state, action) {
   switch (action.type) {

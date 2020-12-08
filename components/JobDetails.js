@@ -2,9 +2,11 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link, useParams } from 'react-router-dom'
 import { CgArrowLongLeft } from 'react-icons/cg'
+import { IoMdGlobe } from 'react-icons/io'
+import { BsClock } from 'react-icons/bs'
 
-const API_URL = "https://jobs.github.com/"
-const CORS_KEY = "https://cors-anywhere.herokuapp.com/"
+import JobDetailsStyles from './styles/JobDetailsStyles'
+import { API_URL, CORS_KEY } from '../context/JobsContext'
 
 export default function JobDetails() {
   const [singleJobDetaijs, setSingleJobDetails] = useState({})
@@ -30,12 +32,16 @@ export default function JobDetails() {
     <JobDetailsContextProvider singleJobDetaijs={singleJobDetaijs}>
       {isLoading
         ? <h2>Loading...</h2>
-        : <>
-            <JobHeader />
-            <GoBackToSearch />
-            <HowToApply />
-            <Description />
-          </>
+        : <JobDetailsStyles>
+            <div>
+              <GoBackToSearch />
+              <HowToApply />
+            </div>
+            <div>
+              <JobHeader />
+              <Description />
+            </div>
+          </JobDetailsStyles>
       }
     </JobDetailsContextProvider>
   )
@@ -62,8 +68,13 @@ function JobHeader () {
       </h2>
       <div className="company_logo">
         <img src={singleJobDetaijs.company_logo} />
-        <h4>{singleJobDetaijs.company}</h4>
-        <h4>{singleJobDetaijs.location}</h4>
+        <div>
+          <h4>{singleJobDetaijs.company}</h4>
+          <div className="icon">
+            <IoMdGlobe />
+            <small>{singleJobDetaijs.location}</small>
+          </div>
+        </div>
       </div>
     </>
   )
@@ -73,7 +84,7 @@ function HowToApply() {
   const { singleJobDetaijs } = useContext(JobDetailsContext)
   return (
     <>
-      <h4>How to apply</h4>
+      <h4 className="howToApply">How to apply</h4>
       <p>{singleJobDetaijs?.how_to_apply}</p>
     </>
   )
@@ -82,16 +93,16 @@ function HowToApply() {
 function Description() {
   const { singleJobDetaijs } = useContext(JobDetailsContext)
   return (
-    <div>
-      <p>{singleJobDetaijs?.description}</p>
-    </div>
+    <>
+      {singleJobDetaijs?.description}
+    </>
   )
 }
 
 function GoBackToSearch() {
   return (
     <Link to="/">
-      <div>
+      <div className="backToHome">
         <CgArrowLongLeft />
         <small>Go back to search</small>
       </div>
