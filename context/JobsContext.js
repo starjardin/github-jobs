@@ -10,7 +10,8 @@ const initialState = {
   full_time: true,
   jobs: [],
   loading: true,
-  error : ""
+  error: "",
+  id : ""
 }
 
 export const ACTIONS = {

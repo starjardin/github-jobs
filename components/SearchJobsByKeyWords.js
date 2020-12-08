@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-
+import { BsBag } from 'react-icons/bs'
 import { GlobalContext, ACTIONS } from '../context/JobsContext'
 
 const FormSearchByKeyWords = styled.form`
