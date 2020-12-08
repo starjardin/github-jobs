@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 
 import { GlobalContext, ACTIONS } from '../context/JobsContext'
+import FullTimeJobSearch from './FullTimeJobSearch'
 
 const FormStyles = styled.form`
   .inputs {
@@ -10,12 +11,23 @@ const FormStyles = styled.form`
     justify-content : flex-end;
     align-items : center;
   }
+  [type="text"] {
+    padding : .6rem;
+    margin-bottom : 2rem;
+  }
+  .btn-search {
+    visibility : hidden;
+  }
+  .location-search {
+    display : block;
+    margin-top : 2rem;
+  }
 `
 
 export default function SearchJobsByLocation() {
-  const [jobsByLocation, setJobsByLocation] = useState('')
-  const [jobsByGivenLocation, setJobsByGivenLocation] = useState('')
   const { state, dispatch } = useContext(GlobalContext)
+  const [jobsByLocation, setJobsByLocation] = useState('')
+  const [jobsByGivenLocation, setJobsByGivenLocation] = useState(state.location)
   const cities = ["london", "San Fransisco", "Berlin", "new york"]
   function handleSearchJobsByLocation(e) {
     e.preventDefault()
@@ -31,12 +43,16 @@ export default function SearchJobsByLocation() {
   return (
     <>
       <FormStyles onSubmit={handleSearchJobsByLocation}>
-        <input
+        <FullTimeJobSearch />
+        <label htmlFor="location" className="location-search">Location</label>
+        <input 
+          type="text"
+          id="location"
           name="searchJob"
           value={jobsByLocation}
           onChange={(e) => setJobsByLocation(e.target.value)}
         />
-        <button>Search</button>
+        <button className="btn-search">Search</button>
         {cities.map((city, index) => (
           <div className="inputs" key={index}>
             <label htmlFor={city}>{ city }</label>
@@ -45,6 +61,7 @@ export default function SearchJobsByLocation() {
               type="checkbox"
               name="searchJobByCity"
               value={city}
+              checked={city.toLocaleLowerCase().trim() === jobsByGivenLocation.toLocaleLowerCase().trim()}
               onChange={handleSearchJobsByGivenLoaction}
             />
           </div>

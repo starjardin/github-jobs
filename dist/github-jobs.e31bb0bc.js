@@ -37403,7 +37403,7 @@ const initialState = {
   lat: "",
   long: "",
   search: "",
-  full_time: true,
+  full_time: false,
   jobs: [],
   loading: true,
   error: "",
@@ -37411,9 +37411,11 @@ const initialState = {
 };
 const ACTIONS = {
   LOADING_STATE: "loading state",
+  FETCH_ERROR: "fetch_error",
   SEARCH_JOB_BY_KEY_WORDS: "search_job_by_key_words",
   SEARCH_JOB_BY_LOCATION: "search_job_by_loaction",
-  SEARCH_JOB_BY_GIVEN_LOCATION: "search_job_by_given_loaction"
+  SEARCH_JOB_BY_GIVEN_LOCATION: "search_job_by_given_loaction",
+  SEARCH_BY_FULL_TIME_JOB: "search_full_time_job"
 };
 exports.ACTIONS = ACTIONS;
 const API_URL = "https://jobs.github.com/";
@@ -37431,11 +37433,27 @@ function reducer(state, action) {
         };
       }
 
+    case ACTIONS.FETCH_ERROR:
+      return { ...state,
+        error: "Something went wrong🥱!! try again"
+      };
+
     case ACTIONS.SEARCH_JOB_BY_KEY_WORDS:
       {
         return { ...state,
           search: action.foundJobsByKeyWords,
-          loading: false
+          loading: false,
+          description: ''
+        };
+      }
+
+    case ACTIONS.SEARCH_BY_FULL_TIME_JOB:
+      {
+        return { ...state,
+          loading: false,
+          description: '',
+          loaction: '',
+          full_time: action.fullTimeJobIsChecked
         };
       }
 
@@ -37450,7 +37468,6 @@ function reducer(state, action) {
 
     case ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION:
       {
-        console.log(action.foundJobsByGivenLocation);
         return { ...state,
           description: '',
           location: action.foundJobsByGivenLocation,
@@ -37496,8 +37513,22 @@ function JobsContextProvider({
     });
   }
 
+  function getFulltimeJobs() {
+    _axios.default.get(CORS_KEY + API_URL + `positions.json?description=${state.description}full_time=${state.full_time}location=${state.location}`).then(response => {
+      dispatch({
+        type: ACTIONS.LOADING_STATE,
+        payload: response.data
+      });
+    }).catch(error => {
+      dispatch({
+        type: "FETCH_ERROR"
+      });
+    });
+  }
+
   (0, _react.useEffect)(() => {
     getJobsData();
+    state.loading = true;
   }, []);
   (0, _react.useEffect)(() => {
     getJobsData();
@@ -37506,8 +37537,10 @@ function JobsContextProvider({
     getJobsData();
   }, [state.location]);
   (0, _react.useEffect)(() => {
+    getFulltimeJobs();
+  }, [state.full_time]);
+  (0, _react.useEffect)(() => {
     getJobsDataByKeyWords();
-    console.log(state);
   }, [state.search]);
   return /*#__PURE__*/_react.default.createElement(GlobalContext.Provider, {
     value: {
@@ -37516,43 +37549,7 @@ function JobsContextProvider({
     }
   }, children);
 }
-},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js"}],"components/FullTimeJobSearch.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = FullTimeJobSearch;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _styledComponents = _interopRequireDefault(require("styled-components"));
-
-var _JobsContext = require("../context/JobsContext");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-const FullTimeJobSearchStyles = _styledComponents.default.div` 
-  input {
-    display : block;
-  }
-
-`;
-
-function FullTimeJobSearch() {
-  const {
-    state,
-    dispatch
-  } = (0, _react.useContext)(_JobsContext.GlobalContext);
-  return /*#__PURE__*/_react.default.createElement(FullTimeJobSearchStyles, null, /*#__PURE__*/_react.default.createElement("label", null, "Full time"), /*#__PURE__*/_react.default.createElement("input", {
-    type: "checkbox"
-  }));
-}
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/JobLists.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js"}],"components/JobLists.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37579,6 +37576,7 @@ const JobListsStyles = _styledComponents.default.ul`
     background-color : #fff;
     margin-block : 1rem;
     display : flex;
+    padding : 1rem 1rem 4rem 1rem;
   }
   .company_logo {
     flex-basis : 30%;
@@ -37590,10 +37588,12 @@ const JobListsStyles = _styledComponents.default.ul`
     position: relative;
     overflow : hidden;
     img {
+      background-color : #F2F2F2;
       height : 100%;
       width : 100%;
       position: absolute;
-      transform : translateX(-20%)
+      transform : translateX(-20%);
+      border-radius: 4px;
     }
   }
 `;
@@ -37609,7 +37609,7 @@ function JobLists({
     src: job.company_logo
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "jobDescription"
-  }, /*#__PURE__*/_react.default.createElement("h4", null, job.company), /*#__PURE__*/_react.default.createElement("p", null, job.title), job.full_time && /*#__PURE__*/_react.default.createElement("button", null, "full time")))));
+  }, /*#__PURE__*/_react.default.createElement("h4", null, job.company), /*#__PURE__*/_react.default.createElement("p", null, job.title), /*#__PURE__*/_react.default.createElement("button", null, job.type)))));
 }
 },{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"node_modules/react-icons/lib/esm/iconsManifest.js":[function(require,module,exports) {
 "use strict";
@@ -55158,7 +55158,55 @@ function SearchJobsByKeyWords() {
     onChange: e => setJobsByKeyWords(e.target.value)
   }), /*#__PURE__*/_react.default.createElement("button", null, "Search"));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","react-icons/bs":"node_modules/react-icons/bs/index.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/SearchJobsByLocation.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","react-icons/bs":"node_modules/react-icons/bs/index.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/FullTimeJobSearch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = FullTimeJobSearch;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _JobsContext = require("../context/JobsContext");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+const FullTimeJobSearchStyles = _styledComponents.default.div` 
+  display : flex;
+  flex-direction : row-reverse;
+  align-items : center;
+  justify-content : flex-end;
+`;
+
+function FullTimeJobSearch() {
+  const {
+    state,
+    dispatch
+  } = (0, _react.useContext)(_JobsContext.GlobalContext);
+  const [fullTimeJobIsChecked, setFullTimeJobIsChecked] = (0, _react.useState)(state.full_time);
+
+  function handleSearchFullTimeJob(e) {
+    setFullTimeJobIsChecked(!fullTimeJobIsChecked);
+    dispatch({
+      type: _JobsContext.ACTIONS.SEARCH_BY_FULL_TIME_JOB,
+      fullTimeJobIsChecked
+    });
+  }
+
+  return /*#__PURE__*/_react.default.createElement(FullTimeJobSearchStyles, null, /*#__PURE__*/_react.default.createElement("label", null, "Full time"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "checkbox",
+    onChange: handleSearchFullTimeJob,
+    checked: fullTimeJobIsChecked
+  }));
+}
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/SearchJobsByLocation.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55171,6 +55219,8 @@ var _react = _interopRequireWildcard(require("react"));
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _JobsContext = require("../context/JobsContext");
+
+var _FullTimeJobSearch = _interopRequireDefault(require("./FullTimeJobSearch"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55185,15 +55235,26 @@ const FormStyles = _styledComponents.default.form`
     justify-content : flex-end;
     align-items : center;
   }
+  [type="text"] {
+    padding : .6rem;
+    margin-bottom : 2rem;
+  }
+  .btn-search {
+    visibility : hidden;
+  }
+  .location-search {
+    display : block;
+    margin-top : 2rem;
+  }
 `;
 
 function SearchJobsByLocation() {
-  const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
-  const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)('');
   const {
     state,
     dispatch
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
+  const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
+  const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)(state.location);
   const cities = ["london", "San Fransisco", "Berlin", "new york"];
 
   function handleSearchJobsByLocation(e) {
@@ -55215,11 +55276,18 @@ function SearchJobsByLocation() {
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(FormStyles, {
     onSubmit: handleSearchJobsByLocation
-  }, /*#__PURE__*/_react.default.createElement("input", {
+  }, /*#__PURE__*/_react.default.createElement(_FullTimeJobSearch.default, null), /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "location",
+    className: "location-search"
+  }, "Location"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "text",
+    id: "location",
     name: "searchJob",
     value: jobsByLocation,
     onChange: e => setJobsByLocation(e.target.value)
-  }), /*#__PURE__*/_react.default.createElement("button", null, "Search"), cities.map((city, index) => /*#__PURE__*/_react.default.createElement("div", {
+  }), /*#__PURE__*/_react.default.createElement("button", {
+    className: "btn-search"
+  }, "Search"), cities.map((city, index) => /*#__PURE__*/_react.default.createElement("div", {
     className: "inputs",
     key: index
   }, /*#__PURE__*/_react.default.createElement("label", {
@@ -55229,10 +55297,11 @@ function SearchJobsByLocation() {
     type: "checkbox",
     name: "searchJobByCity",
     value: city,
+    checked: city.toLocaleLowerCase().trim() === jobsByGivenLocation.toLocaleLowerCase().trim(),
     onChange: handleSearchJobsByGivenLoaction
   })))));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/HomePage.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js","./FullTimeJobSearch":"components/FullTimeJobSearch.js"}],"components/HomePage.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55245,8 +55314,6 @@ var _react = _interopRequireWildcard(require("react"));
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _JobsContext = require("../context/JobsContext");
-
-var _FullTimeJobSearch = _interopRequireDefault(require("./FullTimeJobSearch"));
 
 var _JobLists = _interopRequireDefault(require("./JobLists"));
 
@@ -55279,7 +55346,7 @@ function HomePage() {
     jobs,
     loading
   } = state;
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null), /*#__PURE__*/_react.default.createElement(_FullTimeJobSearch.default, null), /*#__PURE__*/_react.default.createElement(MainStyles, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByLocation.default, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null), /*#__PURE__*/_react.default.createElement(MainStyles, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByLocation.default, {
     className: "search"
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "jobLists"
@@ -55288,7 +55355,7 @@ function HomePage() {
     job: job
   })))));
 }
-},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js","./FullTimeJobSearch":"components/FullTimeJobSearch.js","./JobLists":"components/JobLists.js","./SearchJobsByKeyWords":"components/SearchJobsByKeyWords.js","./SearchJobsByLocation":"components/SearchJobsByLocation.js"}],"node_modules/react-icons/cg/index.esm.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js","./JobLists":"components/JobLists.js","./SearchJobsByKeyWords":"components/SearchJobsByKeyWords.js","./SearchJobsByLocation":"components/SearchJobsByLocation.js"}],"node_modules/react-icons/cg/index.esm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

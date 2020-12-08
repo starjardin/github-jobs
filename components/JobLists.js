@@ -13,6 +13,7 @@ const JobListsStyles = styled.ul`
     background-color : #fff;
     margin-block : 1rem;
     display : flex;
+    padding : 1rem 1rem 4rem 1rem;
   }
   .company_logo {
     flex-basis : 30%;
@@ -24,10 +25,12 @@ const JobListsStyles = styled.ul`
     position: relative;
     overflow : hidden;
     img {
+      background-color : #F2F2F2;
       height : 100%;
       width : 100%;
       position: absolute;
-      transform : translateX(-20%)
+      transform : translateX(-20%);
+      border-radius: 4px;
     }
   }
 `
@@ -43,7 +46,7 @@ export default function JobLists({ job }) {
           <div className="jobDescription">
             <h4>{job.company}</h4>
             <p>{job.title}</p>
-            {job.full_time && <button>full time</button>}
+            <button>{ job.type }</button>
           </div>
         </li>
       </Link>

@@ -8,7 +8,7 @@ const initialState = {
   lat: "",
   long: "",
   search: "",
-  full_time: true,
+  full_time: false,
   jobs: [],
   loading: true,
   error: "",
@@ -17,9 +17,11 @@ const initialState = {
 
 export const ACTIONS = {
   LOADING_STATE: "loading state",
+  FETCH_ERROR : "fetch_error",
   SEARCH_JOB_BY_KEY_WORDS : "search_job_by_key_words",
   SEARCH_JOB_BY_LOCATION : "search_job_by_loaction",
   SEARCH_JOB_BY_GIVEN_LOCATION : "search_job_by_given_loaction",
+  SEARCH_BY_FULL_TIME_JOB : "search_full_time_job",
 }
 
 export const API_URL = "https://jobs.github.com/"
@@ -34,23 +36,35 @@ function reducer(state, action) {
         loading : false
       }
     }
+    case ACTIONS.FETCH_ERROR : return {
+      ...state, error : "Something went wrong🥱!! try again"
+    }
     case ACTIONS.SEARCH_JOB_BY_KEY_WORDS : {
       return {
         ...state,
         search: action.foundJobsByKeyWords,
-        loading : false
+        loading: false,
+        description: '',
+      }
+    }
+    case ACTIONS.SEARCH_BY_FULL_TIME_JOB : {
+      return {
+        ...state,
+        loading: false,
+        description: '',
+        loaction: '',
+        full_time: action.fullTimeJobIsChecked,
       }
     }
     case ACTIONS.SEARCH_JOB_BY_LOCATION: {
       return {
         ...state,
-        description : '',
+        description: '',
         location: action.foundJobsByLocation,
-        loading : false
+        loading: false
       }
     }
     case ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION: {
-      console.log(action.foundJobsByGivenLocation);
       return {
         ...state,
         description : '',
@@ -72,7 +86,7 @@ function JobsContextProvider({ children }) {
     axios
       .get(CORS_KEY + API_URL + `positions.json?description=${state.description}&location=${state.location}`)
       .then(response => {
-        dispatch({ type: ACTIONS.LOADING_STATE, payload : response.data })
+        dispatch({ type: ACTIONS.LOADING_STATE, payload: response.data })
       })
       .catch(error => {
         dispatch({type : "FETCH_ERROR" })
@@ -90,8 +104,20 @@ function JobsContextProvider({ children }) {
       })
   }
 
+  function getFulltimeJobs() {
+    axios
+      .get(CORS_KEY + API_URL + `positions.json?description=${state.description}full_time=${state.full_time}location=${state.location}`)
+      .then(response => {
+        dispatch({ type: ACTIONS.LOADING_STATE, payload : response.data })
+      })
+      .catch(error => {
+        dispatch({type : "FETCH_ERROR" })
+      })
+  }
+
   useEffect(() => {
     getJobsData()
+    state.loading = true
   }, [])
 
   useEffect(() => {
@@ -103,8 +129,11 @@ function JobsContextProvider({ children }) {
   }, [state.location])
 
   useEffect(() => {
+    getFulltimeJobs()
+  }, [state.full_time])
+
+  useEffect(() => {
     getJobsDataByKeyWords()
-    console.log(state);
   }, [state.search])
   return (
     <GlobalContext.Provider value={{state, dispatch }}>
