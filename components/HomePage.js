@@ -7,13 +7,15 @@ import SearchJobsByKeyWords from './SearchJobsByKeyWords'
 import SearchJobsByLocation from './SearchJobsByLocation'
 
 const MainStyles = styled.div`
-  display : flex;
-  gap : 2rem;
-  .search {
-    flex-basis : 30%;
-  }
-  .jobLists {
-    flex-basis : 70%;
+  @media (min-width : 720px) {
+    display : flex;
+    gap : 2rem;
+    .search {
+      flex-basis : 30%;
+    }
+    .jobLists {
+      flex-basis : 70%;
+    }
   }
 `
 

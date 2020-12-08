@@ -10,7 +10,6 @@ import { API_URL, CORS_KEY } from '../context/JobsContext'
 
 export default function JobDetails() {
   const [singleJobDetaijs, setSingleJobDetails] = useState({})
-  const [ isLoading, setIsLoading ] = useState(true)
   const { jobId } = useParams()
 
   function getJobsData() {
@@ -19,10 +18,7 @@ export default function JobDetails() {
       .then(response => {
         setSingleJobDetails(response.data)
       })
-    setIsLoading(false)
   }
-
-  console.log(singleJobDetaijs);
 
   useEffect(() => {
     getJobsData()
@@ -30,7 +26,7 @@ export default function JobDetails() {
 
   return (
     <JobDetailsContextProvider singleJobDetaijs={singleJobDetaijs}>
-      {isLoading
+      {!singleJobDetaijs.title
         ? <h2>Loading...</h2>
         : <JobDetailsStyles>
             <div>

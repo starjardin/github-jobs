@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 const JobDetailsStyles = styled.div`
   color : #334680;
-  display : flex;
   gap : 3rem;
   img {
     width : 3rem;
@@ -15,7 +14,7 @@ const JobDetailsStyles = styled.div`
   }
   .backToHome {
     color : #1E86FF;
-    small {color : #1E86FF;}
+    padding-bottom : 3rem;
   }
   .backToHome, .company_logo, .icon {
     display : flex;
@@ -29,14 +28,15 @@ const JobDetailsStyles = styled.div`
       font-weight: 500;
       font-size: 12px;
       line-height: 14px;
-      color: #B9BDCF;
+      // color: #B9BDCF;
     }
     .icon {
       gap : 2px;
     }
-    h2 {
-      
-    }
+  }
+  
+  h2 {
+    padding-block : 2rem;
   }
 
   .howToApply {
@@ -45,6 +45,13 @@ const JobDetailsStyles = styled.div`
     line-height: 21px;
     text-transform: uppercase;
     color: #B9BDCF;
+    padding-block : 1rem;
+  }
+  @media (min-width : 720px) {
+    display : flex;
+    h2, .backToHome {
+      padding : 0;
+    }
   }
 `
 

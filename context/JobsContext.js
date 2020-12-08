@@ -108,7 +108,7 @@ function JobsContextProvider({ children }) {
     axios
       .get(CORS_KEY + API_URL + `positions.json?description=${state.description}full_time=${state.full_time}location=${state.location}`)
       .then(response => {
-        dispatch({ type: ACTIONS.LOADING_STATE, payload : response.data })
+        dispatch({ type: ACTIONS.LOADING_STATE, payload: response.data })
       })
       .catch(error => {
         dispatch({type : "FETCH_ERROR" })
@@ -117,7 +117,7 @@ function JobsContextProvider({ children }) {
 
   useEffect(() => {
     getJobsData()
-    state.loading = true
+    console.log(state);
   }, [])
 
   useEffect(() => {
@@ -135,6 +135,7 @@ function JobsContextProvider({ children }) {
   useEffect(() => {
     getJobsDataByKeyWords()
   }, [state.search])
+
   return (
     <GlobalContext.Provider value={{state, dispatch }}>
       { children }

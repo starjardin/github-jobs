@@ -33,4 +33,8 @@ body {
   color: #334680;
 }
 
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
 /*# sourceMappingURL=/styles.5c8f3eab.css.map */
