@@ -29,9 +29,10 @@ export default function HomePage () {
       <MainStyles>
         <SearchJobsByLocation className="search"/>
         <div className="jobLists">
-          {!jobs.length
-            ? <h2>Loading...</h2>
-            :  jobs.map((job, index) => (
+          {loading
+            ? <h2>Loading...</h2> 
+            : !jobs.length ? <h2>No items found</h2>
+              : jobs.map((job, index) => (
               <JobLists key={index} job={ job }/>
             ))
           }

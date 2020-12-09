@@ -37399,7 +37399,7 @@ const GlobalContext = (0, _react.createContext)();
 exports.GlobalContext = GlobalContext;
 const initialState = {
   description: "python",
-  location: "new york",
+  location: "",
   lat: "",
   long: "",
   search: "code",
@@ -37443,23 +37443,25 @@ function reducer(state, action) {
         return { ...state,
           search: action.foundJobsByKeyWords,
           loading: false,
-          description: ''
+          description: '',
+          location: ''
         };
       }
 
     case ACTIONS.SEARCH_BY_FULL_TIME_JOB:
       {
+        console.log(action.fullTimeJobIsChecked);
+
         if (action.fullTimeJobIsChecked) {
-          console.log("yes it is true");
-          console.log(action.fullTimeJobIsChecked);
           return { ...state,
             loading: false,
             description: '',
             loaction: '',
             full_time: action.fullTimeJobIsChecked
           };
-        } // return state
-
+        } else {
+          return state;
+        }
       }
 
     case ACTIONS.SEARCH_JOB_BY_LOCATION:
@@ -37519,7 +37521,7 @@ function JobsContextProvider({
   }
 
   function getFulltimeJobs() {
-    _axios.default.get(CORS_KEY + API_URL + `positions.json?description=${state.description}full_time=${state.full_time}location=${state.location}`).then(response => {
+    _axios.default.get(CORS_KEY + API_URL + `positions.json?description=${state.description}&full_time=${state.full_time}&location=${state.location}`).then(response => {
       dispatch({
         type: ACTIONS.LOADING_STATE,
         payload: response.data
@@ -68830,14 +68832,12 @@ function JobLists({
   const time = date.getTime();
   const timeNow = Date.now();
   const timeDifference = timeNow - time;
-  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`;
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
 
   if (dateDifference < 1) {
-    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`;
-  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
-    dateDifference = Math.round(timeDifference * (1000 * 60))` minutes ago`;
-  } else if (dateDifference > 1 || dateDifference < 31) {
-    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30))` months ago`;
+    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + ` hours ago`;
+  } else {
+    dateDifference = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference + ` days ago`;
   }
 
   return /*#__PURE__*/_react.default.createElement(JobListsStyles, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
@@ -69009,6 +69009,8 @@ const FormStyles = _styledComponents.default.form`
   [type="text"] {
     padding : .6rem;
     border : none;
+    display : block;
+    width : 100%;
   }
 
   [type="text"]:focus {
@@ -69045,6 +69047,7 @@ function SearchJobsByLocation() {
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
   const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
   const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)(state.location);
+  console.log(state.location);
   const cities = ["london", "San Fransisco", "Berlin", "new york"];
 
   function handleSearchJobsByLocation(e) {
@@ -69064,6 +69067,9 @@ function SearchJobsByLocation() {
     });
   }
 
+  (0, _react.useEffect)(() => {
+    setJobsByGivenLocation(state.location);
+  }, [state.location]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(FormStyles, {
     onSubmit: handleSearchJobsByLocation
   }, /*#__PURE__*/_react.default.createElement(_FullTimeJobSearch.default, null), /*#__PURE__*/_react.default.createElement("label", {
@@ -69091,7 +69097,7 @@ function SearchJobsByLocation() {
     type: "checkbox",
     name: "searchJobByCity",
     value: city,
-    checked: city.toLocaleLowerCase().trim() === jobsByGivenLocation.toLocaleLowerCase().trim(),
+    checked: city.trim().toLocaleLowerCase() === jobsByGivenLocation.toLocaleLowerCase().trim(),
     onChange: handleSearchJobsByGivenLoaction
   })))));
 }
@@ -69146,7 +69152,7 @@ function HomePage() {
     className: "search"
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "jobLists"
-  }, !jobs.length ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : jobs.map((job, index) => /*#__PURE__*/_react.default.createElement(_JobLists.default, {
+  }, loading ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : !jobs.length ? /*#__PURE__*/_react.default.createElement("h2", null, "No items found") : jobs.map((job, index) => /*#__PURE__*/_react.default.createElement(_JobLists.default, {
     key: index,
     job: job
   })))));

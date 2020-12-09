@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { IoMdGlobe } from 'react-icons/io'
 
@@ -19,6 +19,8 @@ const FormStyles = styled.form`
   [type="text"] {
     padding : .6rem;
     border : none;
+    display : block;
+    width : 100%;
   }
 
   [type="text"]:focus {
@@ -52,6 +54,7 @@ export default function SearchJobsByLocation() {
   const { state, dispatch } = useContext(GlobalContext)
   const [jobsByLocation, setJobsByLocation] = useState('')
   const [jobsByGivenLocation, setJobsByGivenLocation] = useState(state.location)
+  console.log(state.location);
   const cities = ["london", "San Fransisco", "Berlin", "new york"]
 
   function handleSearchJobsByLocation(e) {
@@ -67,6 +70,10 @@ export default function SearchJobsByLocation() {
     setJobsByGivenLocation(e.target.value)
     dispatch({ type: ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION, foundJobsByGivenLocation: e.target.value })
   }
+  
+  useEffect(() => {
+    setJobsByGivenLocation(state.location)
+  }, [state.location])
 
   return (
     <>
@@ -94,7 +101,7 @@ export default function SearchJobsByLocation() {
               type="checkbox"
               name="searchJobByCity"
               value={city}
-              checked={city.toLocaleLowerCase().trim() === jobsByGivenLocation.toLocaleLowerCase().trim()}
+              checked={city.trim().toLocaleLowerCase() === jobsByGivenLocation.toLocaleLowerCase().trim()}
               onChange={handleSearchJobsByGivenLoaction}
             />
           </div>

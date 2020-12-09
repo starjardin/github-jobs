@@ -64,13 +64,12 @@ export default function JobLists({ job }) {
   const time = date.getTime()
   const timeNow = Date.now()
   const timeDifference = timeNow - time
-  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24))
+
   if (dateDifference < 1) {
-    dateDifference  = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`
-  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
-    dateDifference = Math.round(timeDifference * (1000 * 60)) ` minutes ago`
-  } else if (dateDifference > 1 || dateDifference < 31) {
-    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30)) ` months ago`
+    dateDifference  = Math.round(timeDifference / (1000 * 60 * 60)) + ` hours ago`
+  } else {
+    dateDifference  = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference  + ` days ago`
   }
 
   return (

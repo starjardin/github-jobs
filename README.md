@@ -41,15 +41,15 @@ Template for your readme :
 
 <!-- Please update value in the {}  -->
 
-<h1 align="center">{Your project name}</h1>
+<h1 align="center">Github Jobs</h1>
 
 <div align="center">
   <h3>
-    <a href="https://{your-demo-link.your-domain}">
+    <a href="https://github-jobs-tanteli.netlify.app/">
       Demo
     </a>
     <span> | </span>
-    <a href="https://{your-url-to-the-solution}">
+    <a href="https://github.com/starjardin/github-jobs">
       Solution
     </a>
   </h3>
@@ -74,7 +74,7 @@ Template for your readme :
 
 Introduce your projects by taking a screenshot or a gif. Try to tell visitors a story about your project by answering:
 
--   Where can I see your demo?
+-   You can see the demo of this app by clicking this following link <a href="https://github-jobs-tanteli.netlify.app/">Demo</a>
 -   What was your experience?
 -   In a few sentences, explain the structure of your project.
 -   If you had more time, what area of your project would you improve?
@@ -118,4 +118,4 @@ $ npm start
 ## Contact
 
 -   Website [your-website.com](https://{your-web-site-link})
--   GitHub [@your-username](https://{github.com/your-usermame})
+-   GitHub [@your-username](https://github.com/starjardin)

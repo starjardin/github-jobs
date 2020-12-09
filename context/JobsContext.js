@@ -4,7 +4,7 @@ import axios from 'axios'
 const GlobalContext = createContext()
 const initialState = {
   description: "python",
-  location: "new york",
+  location: "",
   lat: "",
   long: "",
   search: "code",
@@ -45,12 +45,12 @@ function reducer(state, action) {
         search: action.foundJobsByKeyWords,
         loading: false,
         description: '',
+        location : ''
       }
     }
     case ACTIONS.SEARCH_BY_FULL_TIME_JOB: {
+      console.log(action.fullTimeJobIsChecked);
       if (action.fullTimeJobIsChecked) {
-        console.log("yes it is true");
-        console.log(action.fullTimeJobIsChecked);
         return {
           ...state,
           loading: false,
@@ -58,8 +58,9 @@ function reducer(state, action) {
           loaction: '',
           full_time: action.fullTimeJobIsChecked,
         }
+      } else {
+        return state
       }
-      // return state
     }
     case ACTIONS.SEARCH_JOB_BY_LOCATION: {
       return {
@@ -111,7 +112,7 @@ function JobsContextProvider({ children }) {
 
   function getFulltimeJobs() {
     axios
-      .get(CORS_KEY + API_URL + `positions.json?description=${state.description}full_time=${state.full_time}location=${state.location}`)
+      .get(CORS_KEY + API_URL + `positions.json?description=${state.description}&full_time=${state.full_time}&location=${state.location}`)
       .then(response => {
         dispatch({ type: ACTIONS.LOADING_STATE, payload: response.data })
       })
