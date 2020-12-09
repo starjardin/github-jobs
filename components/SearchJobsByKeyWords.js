@@ -8,10 +8,9 @@ const FormSearchByKeyWords = styled.form`
   justify-content : space-between;
   align-items : center;
   background-color : #fff;
-  width : 85vw;
+  width : 100%;
   margin : auto;
   padding-block : 1rem;
-  margin-bottom : 2rem;
   input {
     width : 100%;
     border : none;
@@ -39,7 +38,6 @@ export default function SearchJobsByKeyWords() {
   
   return (
     <FormSearchByKeyWords onSubmit={handleSearchSubmit}>
-
       <input
         name="searchJob"
         placeholder="title, companies, expertise"

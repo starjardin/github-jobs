@@ -68879,10 +68879,9 @@ const FormSearchByKeyWords = _styledComponents.default.form`
   justify-content : space-between;
   align-items : center;
   background-color : #fff;
-  width : 85vw;
+  width : 100%;
   margin : auto;
   padding-block : 1rem;
-  margin-bottom : 2rem;
   input {
     width : 100%;
     border : none;
@@ -69047,7 +69046,6 @@ function SearchJobsByLocation() {
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
   const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
   const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)(state.location);
-  console.log(state.location);
   const cities = ["london", "San Fransisco", "Berlin", "new york"];
 
   function handleSearchJobsByLocation(e) {
@@ -69139,6 +69137,13 @@ const MainStyles = _styledComponents.default.div`
     }
   }
 `;
+const HeaderStyles = _styledComponents.default.div`
+  background-image : url("https://raw.githubusercontent.com/onja-org/github-jobs/main/backgroundImg.png");
+  padding : 2rem 3rem;
+  background-repeat : no-repeat;
+  background-size : 100% 100%;\
+  margin-bottom : 2rem;
+`;
 
 function HomePage() {
   const {
@@ -69148,7 +69153,7 @@ function HomePage() {
     jobs,
     loading
   } = state;
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null), /*#__PURE__*/_react.default.createElement(MainStyles, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByLocation.default, {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(HeaderStyles, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByKeyWords.default, null)), /*#__PURE__*/_react.default.createElement(MainStyles, null, /*#__PURE__*/_react.default.createElement(_SearchJobsByLocation.default, {
     className: "search"
   }), /*#__PURE__*/_react.default.createElement("div", {
     className: "jobLists"
@@ -90086,10 +90091,11 @@ function JobDetails() {
   } = (0, _reactRouterDom.useParams)();
 
   function getJobsData() {
-    _axios.default.get(_JobsContext.CORS_KEY + _JobsContext.API_URL + `positions/${jobId}.json?markdown=true`).then(response => {
+    _axios.default.get(_JobsContext.CORS_KEY + _JobsContext.API_URL + `positions/${jobId}.json`).then(response => {
       setSingleJobDetails(response.data);
     });
-  }
+  } // ?markdown=true
+
 
   (0, _react.useEffect)(() => {
     getJobsData();
@@ -90154,7 +90160,8 @@ function Description() {
   const {
     singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, singleJobDetails?.description);
+  const description = singleJobDetails?.description;
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, description);
 }
 
 function GoBackToSearch() {

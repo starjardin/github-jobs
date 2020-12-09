@@ -14,11 +14,13 @@ export default function JobDetails() {
 
   function getJobsData() {
     axios
-      .get(CORS_KEY + API_URL + `positions/${jobId}.json?markdown=true`)
+      .get(CORS_KEY + API_URL + `positions/${jobId}.json`)
       .then(response => {
         setSingleJobDetails(response.data)
       })
   }
+
+  // ?markdown=true
 
   useEffect(() => {
     getJobsData()
@@ -107,9 +109,11 @@ function HowToApply() {
 
 function Description() {
   const { singleJobDetails } = useContext(JobDetailsContext)
+  const description = singleJobDetails?.description
+
   return (
     <>
-      {singleJobDetails?.description}
+      {description}
     </>
   )
 }

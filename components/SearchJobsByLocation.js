@@ -54,7 +54,6 @@ export default function SearchJobsByLocation() {
   const { state, dispatch } = useContext(GlobalContext)
   const [jobsByLocation, setJobsByLocation] = useState('')
   const [jobsByGivenLocation, setJobsByGivenLocation] = useState(state.location)
-  console.log(state.location);
   const cities = ["london", "San Fransisco", "Berlin", "new york"]
 
   function handleSearchJobsByLocation(e) {
