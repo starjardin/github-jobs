@@ -21,8 +21,8 @@ export default function FullTimeJobSearch() {
 
   return (
     <FullTimeJobSearchStyles>
-      <label>Full time</label>
-      <input type="checkbox" onChange={handleSearchFullTimeJob} checked={ fullTimeJobIsChecked}/>
+      <label htmlFor="full_time">Full time</label>
+      <input type="checkbox" onChange={handleSearchFullTimeJob} checked={ fullTimeJobIsChecked} id="full_time"/>
     </FullTimeJobSearchStyles>
   )
 }

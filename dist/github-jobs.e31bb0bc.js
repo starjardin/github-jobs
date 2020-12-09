@@ -68978,10 +68978,13 @@ function FullTimeJobSearch() {
     });
   }
 
-  return /*#__PURE__*/_react.default.createElement(FullTimeJobSearchStyles, null, /*#__PURE__*/_react.default.createElement("label", null, "Full time"), /*#__PURE__*/_react.default.createElement("input", {
+  return /*#__PURE__*/_react.default.createElement(FullTimeJobSearchStyles, null, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "full_time"
+  }, "Full time"), /*#__PURE__*/_react.default.createElement("input", {
     type: "checkbox",
     onChange: handleSearchFullTimeJob,
-    checked: fullTimeJobIsChecked
+    checked: fullTimeJobIsChecked,
+    id: "full_time"
   }));
 }
 },{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/SearchJobsByLocation.js":[function(require,module,exports) {
