@@ -47,14 +47,19 @@ function reducer(state, action) {
         description: '',
       }
     }
-    case ACTIONS.SEARCH_BY_FULL_TIME_JOB : {
-      return {
-        ...state,
-        loading: false,
-        description: '',
-        loaction: '',
-        full_time: action.fullTimeJobIsChecked,
+    case ACTIONS.SEARCH_BY_FULL_TIME_JOB: {
+      if (action.fullTimeJobIsChecked) {
+        console.log("yes it is true");
+        console.log(action.fullTimeJobIsChecked);
+        return {
+          ...state,
+          loading: false,
+          description: '',
+          loaction: '',
+          full_time: action.fullTimeJobIsChecked,
+        }
       }
+      // return state
     }
     case ACTIONS.SEARCH_JOB_BY_LOCATION: {
       return {

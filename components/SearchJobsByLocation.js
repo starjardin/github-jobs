@@ -65,7 +65,7 @@ export default function SearchJobsByLocation() {
 
   function handleSearchJobsByGivenLoaction(e) {
     setJobsByGivenLocation(e.target.value)
-    dispatch({ type: ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION, foundJobsByGivenLocation: jobsByGivenLocation })
+    dispatch({ type: ACTIONS.SEARCH_JOB_BY_GIVEN_LOCATION, foundJobsByGivenLocation: e.target.value })
   }
 
   return (
