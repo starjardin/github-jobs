@@ -37523,6 +37523,8 @@ function JobsContextProvider({
         type: "FETCH_ERROR"
       });
     });
+
+    return state.loading = true;
   }
 
   function getFulltimeJobs() {
@@ -68838,9 +68840,10 @@ function JobLists({
   const timeNow = Date.now();
   const timeDifference = timeNow - time;
   let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+  let hoursDifference = Math.round(timeDifference / (1000 * 60 * 60));
 
   if (dateDifference < 1) {
-    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + ` hours ago`;
+    dateDifference = hoursDifference === 1 ? hoursDifference + ` hour ago` : hoursDifference + ` hours ago`;
   } else {
     dateDifference = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference + ` days ago`;
   }
@@ -90151,12 +90154,13 @@ function JobHeader() {
   const time = date.getTime();
   const timeNow = Date.now();
   const timeDifference = timeNow - time;
-  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`;
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
+  let hoursDifference = Math.round(timeDifference / (1000 * 60 * 60));
 
   if (dateDifference < 1) {
-    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`;
-  } else if (dateDifference > 1 || dateDifference < 31) {
-    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30))` months ago`;
+    dateDifference = hoursDifference === 1 ? hoursDifference + ` hour ago` : hoursDifference + ` hours ago`;
+  } else {
+    dateDifference = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference + ` days ago`;
   }
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h2", null, singleJobDetails.title, " ", /*#__PURE__*/_react.default.createElement("button", null, singleJobDetails.type)), /*#__PURE__*/_react.default.createElement("div", {
@@ -90176,11 +90180,19 @@ function createMarkup(jsonHtml) {
   };
 }
 
+const HowToApplyStyles = _styledComponents.default.div`
+  a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break : break-all;
+  }
+`;
+
 function HowToApply() {
   const {
     singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h4", {
+  return /*#__PURE__*/_react.default.createElement(HowToApplyStyles, null, /*#__PURE__*/_react.default.createElement("h4", {
     className: "howToApply"
   }, "How to apply"), /*#__PURE__*/_react.default.createElement("p", {
     dangerouslySetInnerHTML: createMarkup(singleJobDetails.how_to_apply)
@@ -90188,6 +90200,7 @@ function HowToApply() {
 }
 
 const JobDEscriptionStyles = _styledComponents.default.div`
+  max-width : 100vw;
   p {
     margin-block : .5rem;
   }

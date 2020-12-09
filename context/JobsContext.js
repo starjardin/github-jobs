@@ -108,6 +108,7 @@ function JobsContextProvider({ children }) {
       .catch(error => {
         dispatch({type : "FETCH_ERROR" })
       })
+    return state.loading = true
   }
 
   function getFulltimeJobs() {

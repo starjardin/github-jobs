@@ -65,9 +65,10 @@ export default function JobLists({ job }) {
   const timeNow = Date.now()
   const timeDifference = timeNow - time
   let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24))
+  let hoursDifference = Math.round(timeDifference / (1000 * 60 * 60))
 
   if (dateDifference < 1) {
-    dateDifference  = Math.round(timeDifference / (1000 * 60 * 60)) + ` hours ago`
+    dateDifference  = hoursDifference === 1 ? hoursDifference+ ` hour ago` : hoursDifference + ` hours ago`
   } else {
     dateDifference  = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference  + ` days ago`
   }

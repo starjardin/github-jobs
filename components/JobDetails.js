@@ -64,11 +64,13 @@ function JobHeader () {
   const time = date.getTime()
   const timeNow = Date.now()
   const timeDifference = timeNow - time
-  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`
+  let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24))
+  let hoursDifference = Math.round(timeDifference / (1000 * 60 * 60))
+
   if (dateDifference < 1) {
-    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`
-  } else if (dateDifference > 1 || dateDifference < 31) {
-    dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30)) ` months ago`
+    dateDifference  = hoursDifference === 1 ? hoursDifference+ ` hour ago` : hoursDifference + ` hours ago`
+  } else {
+    dateDifference  = dateDifference === 1 ? dateDifference + ` day ago` : dateDifference  + ` days ago`
   }
 
   return (
@@ -100,17 +102,26 @@ function createMarkup(jsonHtml) {
   return {__html : jsonHtml }
 }
 
+const HowToApplyStyles = styled.div`
+  a {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break : break-all;
+  }
+`
+
 function HowToApply() {
   const { singleJobDetails } = useContext(JobDetailsContext)
   return (
-    <>
+    <HowToApplyStyles>
       <h4 className="howToApply">How to apply</h4>
       <p dangerouslySetInnerHTML={createMarkup(singleJobDetails.how_to_apply)} />
-    </>
+    </HowToApplyStyles>
   )
 }
 
 const JobDEscriptionStyles = styled.div`
+  max-width : 100vw;
   p {
     margin-block : .5rem;
   }
