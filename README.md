@@ -2,42 +2,7 @@
 
 Here we are, the last graded project of this semester.
 
-Your challenge: Create a job search using an API, and use React to handle the frontend. Don’t look at the existing solution. Fulfill user stories below:
-
-![image](./assets/1.png)
-![image](./assets/2.png)
-![image](./assets/3.png)
-
-- User story: I can see a list of jobs in a city by default
-- User story: I can search for jobs with a given keyword
-- User story: I can search for jobs with a city name, zip code or other location
-- User story: I can select one option from at least 4 pre-defined options
-- User story: I can search for a full-time job only
-- User story: I can see a list of jobs with their logo, company name, location, and posted time.
-- User story: When I select a job, I can see job descriptions and how to apply like the given design.
-- User story: When I am on the job details page, I can go back to the search page
-- User story (optional): I can see a list of jobs in the closest city from my location by default
-- User story (optional): I can see jobs in different pages, 5 items each page
-
-You’ll also have to apply a few concept we learned in class, such as a **reducer** and a global **context**. And there will be a bonus for those who can find a use case for a **compound component**.
-
-**Icon**: https://google.github.io/material-design-icons/ (you can also use the react-icons package)
-
-**API**: https://jobs.github.com/api. Use data from the API to create questions and answers.
-
-*If you get some CORS errors, you can use https://cors-anywhere.herokuapp.com/ to help with accessing data from other websites that are normally forbidden by the same-origin policy of web browsers*
-
-**Design** : https://www.figma.com/file/gAkVx9CdOqnJcCjJ7nVNkw
-
-**Live app** : https://jolly-heisenberg-20c49e.netlify.app/
-
-Once you completed, polish a nice readme submit your solutions on this link : https://forms.gle/Xg6kJMKmrBkyTe3TA, by providing URLs for both GitHub repository and live app on Netlify.
-
-For the custom domain url you'll enter in netlify, please use the following naming convention : **github-jobs-_YOUR_FIRSTNAME_.netlify.app** (replace YOUR_FIRSTNAME by your firstname)
-
-Good luck everybody!
-
-Template for your readme :
+My challenge: Create a job search using an API, and use React to handle the frontend. 
 
 <!-- Please update value in the {}  -->
 
@@ -70,20 +35,20 @@ Template for your readme :
 
 ## Overview
 
+Introduce your projects by taking a screenshot or a gif. Try to tell visitors a story about your project by answering:
+
 ![image](./assets/jobDesc_lg.jpg)
 ![image](./assets/jobDesc_sm.jpg)
 ![image](./assets/jobSearch_sm.jpg)
 ![image](./assets/jobSearch_lg.jpg)
 
-Introduce your projects by taking a screenshot or a gif. Try to tell visitors a story about your project by answering:
-
 -   You can see the demo of this app by clicking this following link <a href="https://github-jobs-tanteli.netlify.app/">Demo</a>
--   In this project, I can say tones of things but I will make long story short. First, it was very challenging and enjoyable, at least for me. The most challenging part was to get used to the dispatch and reducer fuctions. There were lots of discoveries during the project such as I learned using axios, which I knew a little before and now I know more than I did. This part of the job description in which we get a string of html is also a fun one, there we had to do lots of researches to get it work in normal html.
--   In a few sentences, I am going to explain breifly about my project. To start with, the project was not perfectly done, however, some of the features are working fine. One thing that I am not really satified and I am really sad that I did not get was the loading state while the data fetching is still busy, however some of them are working such as in the page first load, the loading state is showing but when you start searching, the laoding state does not show.
+-   In this project, I can say tones of things but I will make long story short. First, it was very challenging and enjoyable, at least for me. The most challenging part was to get used to the dispatch and reducer fuctions. There were lots of discoveries during the project such as I learned using axios, which I knew a little before and now I know more than I did. This part, the job description, in which we get a html string from json is also a fun one, there I had to do lots of researches to get it work in normal html.
+-   In a few sentences, I am going to explain breifly about my project. To start with, the project was not perfectly done, however, some of the features are working fine. One thing that I am not really satified and I am really sad about is that I did not get the loading state while the data fetching is still busy, however some of them are working such as in the page first load, the loading state is showing but when you start searching, the laoding state does not show.
 -   If I had more time, I would definitely improve my this project. First thing I would start thinking about is the loading state because I am not happy with it. Secondly, I would start making some of the styles a bit better. And finally, I would give it a try with the optional part which are the paginations and the job searching depending on the nearest city where you are. I haven't done it nor have I given it a try but I think with in a lot of research, it would be doable.
--   Did you learn anything new while working on this project?
--   What was the most challenging part for you?
--   Any other comments?
+-   I would lie if I said I didn't learn anything in this project, absolutely I learned tones of things. First of all, it was a best practice for using reducer and context together. More than that, I tried using libraries that are I am not familiar with but in the end they work just fine. Using styled components are now becoming more in the hands which I think is a new thing to know.
+-   The most challenging part of the project was modifying the url depending on what you are searching for. A big one that I could not solved was the loading state which is very very important for the user and it would make your app shines as well.
+-   One thing that I have noticed during thing project was my work speed. I think I need to work more my speed as well. Finally, Planning before diving into the project is very crucial but I think I am still in the process of getting there.
 
 
 
