@@ -11,10 +11,19 @@ const FormSearchByKeyWords = styled.form`
   width : 100%;
   margin : auto;
   padding-block : 1rem;
+  border-radius : 5px;
+  flex-wrap : wrap;
+  div {
+    flex-wrap : wrap;
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+    padding : 0rem 1rem;
+  }
   input {
-    width : 100%;
     border : none;
     padding : 1rem;
+    margin-left : 1rem;
   }
 
   button {
@@ -38,12 +47,15 @@ export default function SearchJobsByKeyWords() {
   
   return (
     <FormSearchByKeyWords onSubmit={handleSearchSubmit}>
-      <input
-        name="searchJob"
-        placeholder="title, companies, expertise"
-        value={jobsByKeyWords}
-        onChange={(e) => setJobsByKeyWords(e.target.value)}
-      />
+      <div>
+        <BsBag />
+        <input
+          name="searchJob"
+          placeholder="title, companies, expertise"
+          value={jobsByKeyWords}
+          onChange={(e) => setJobsByKeyWords(e.target.value)}
+        />
+      </div>
       <button>Search</button>
     </FormSearchByKeyWords>
   )

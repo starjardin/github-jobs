@@ -35789,17 +35789,22 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const HeaderStyles = _styledComponents.default.h1`
-  strong {
-    font-weight: bold;
+  .strong {
+    font-weight: 900;
     font-size: 24px;
     line-height: 36px;
     color: #282538;
-    color : red;
+    text-shadow: #FC0 1px 0 10px;
   }
+  padding-bottom : 3rem;
 `;
 
 function Header() {
-  return /*#__PURE__*/_react.default.createElement("h1", null, /*#__PURE__*/_react.default.createElement("strong", null, "GitHub"), " Jobs");
+  return /*#__PURE__*/_react.default.createElement(HeaderStyles, {
+    className: "header"
+  }, /*#__PURE__*/_react.default.createElement("strong", {
+    className: "strong"
+  }, "GitHub"), " Jobs");
 }
 },{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
@@ -68882,10 +68887,19 @@ const FormSearchByKeyWords = _styledComponents.default.form`
   width : 100%;
   margin : auto;
   padding-block : 1rem;
+  border-radius : 5px;
+  flex-wrap : wrap;
+  div {
+    flex-wrap : wrap;
+    display : flex;
+    justify-content : space-between;
+    align-items : center;
+    padding : 0rem 1rem;
+  }
   input {
-    width : 100%;
     border : none;
     padding : 1rem;
+    margin-left : 1rem;
   }
 
   button {
@@ -68915,12 +68929,12 @@ function SearchJobsByKeyWords() {
 
   return /*#__PURE__*/_react.default.createElement(FormSearchByKeyWords, {
     onSubmit: handleSearchSubmit
-  }, /*#__PURE__*/_react.default.createElement("input", {
+  }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_bs.BsBag, null), /*#__PURE__*/_react.default.createElement("input", {
     name: "searchJob",
     placeholder: "title, companies, expertise",
     value: jobsByKeyWords,
     onChange: e => setJobsByKeyWords(e.target.value)
-  }), /*#__PURE__*/_react.default.createElement("button", null, "Search"));
+  })), /*#__PURE__*/_react.default.createElement("button", null, "Search"));
 }
 },{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","react-icons/bs":"node_modules/react-icons/bs/index.esm.js","../context/JobsContext":"context/JobsContext.js"}],"components/FullTimeJobSearch.js":[function(require,module,exports) {
 "use strict";
@@ -69141,8 +69155,9 @@ const HeaderStyles = _styledComponents.default.div`
   background-image : url("https://raw.githubusercontent.com/onja-org/github-jobs/main/backgroundImg.png");
   padding : 2rem 3rem;
   background-repeat : no-repeat;
-  background-size : 100% 100%;\
+  background-size : 100% 100%;
   margin-bottom : 2rem;
+  margin-top : 2rem;
 `;
 
 function HomePage() {
@@ -90046,7 +90061,8 @@ const JobDetailsStyles = _styledComponents.default.div`
     padding-block : 1rem;
   }
   @media (min-width : 720px) {
-    display : flex;
+    display : grid;
+    grid-template-columns : 1fr 3fr;
     h2, .backToHome {
       padding : 0;
     }
@@ -90078,6 +90094,8 @@ var _JobDetailsStyles = _interopRequireDefault(require("./styles/JobDetailsStyle
 
 var _JobsContext = require("../context/JobsContext");
 
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
@@ -90094,7 +90112,7 @@ function JobDetails() {
     _axios.default.get(_JobsContext.CORS_KEY + _JobsContext.API_URL + `positions/${jobId}.json`).then(response => {
       setSingleJobDetails(response.data);
     });
-  } // ?markdown=true
+  } // 
 
 
   (0, _react.useEffect)(() => {
@@ -90102,7 +90120,11 @@ function JobDetails() {
   }, []);
   return /*#__PURE__*/_react.default.createElement(JobDetailsContextProvider, {
     singleJobDetails: singleJobDetails
-  }, !singleJobDetails.title ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : /*#__PURE__*/_react.default.createElement(_JobDetailsStyles.default, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(GoBackToSearch, null), /*#__PURE__*/_react.default.createElement(HowToApply, null)), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(JobHeader, null), /*#__PURE__*/_react.default.createElement(Description, null))));
+  }, !singleJobDetails.title ? /*#__PURE__*/_react.default.createElement("h2", null, "Loading...") : /*#__PURE__*/_react.default.createElement(_JobDetailsStyles.default, null, /*#__PURE__*/_react.default.createElement("div", {
+    className: "left"
+  }, /*#__PURE__*/_react.default.createElement(GoBackToSearch, null), /*#__PURE__*/_react.default.createElement(HowToApply, null)), /*#__PURE__*/_react.default.createElement("div", {
+    className: "right"
+  }, /*#__PURE__*/_react.default.createElement(JobHeader, null), /*#__PURE__*/_react.default.createElement(Description, null))));
 }
 
 const JobDetailsContext = (0, _react.createContext)();
@@ -90130,8 +90152,6 @@ function JobHeader() {
 
   if (dateDifference < 1) {
     dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`;
-  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
-    dateDifference = Math.round(timeDifference * (1000 * 60))` minutes ago`;
   } else if (dateDifference > 1 || dateDifference < 31) {
     dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30))` months ago`;
   }
@@ -90147,21 +90167,41 @@ function JobHeader() {
   }, /*#__PURE__*/_react.default.createElement(_io.IoMdGlobe, null), /*#__PURE__*/_react.default.createElement("small", null, singleJobDetails.location)))));
 }
 
+function createMarkup(jsonHtml) {
+  return {
+    __html: jsonHtml
+  };
+}
+
 function HowToApply() {
   const {
     singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("h4", {
     className: "howToApply"
-  }, "How to apply"), /*#__PURE__*/_react.default.createElement("p", null, singleJobDetails?.how_to_apply));
+  }, "How to apply"), /*#__PURE__*/_react.default.createElement("p", {
+    dangerouslySetInnerHTML: createMarkup(singleJobDetails.how_to_apply)
+  }));
 }
+
+const JobDEscriptionStyles = _styledComponents.default.div`
+  p {
+    margin-block : .5rem;
+  }
+
+  h2 {
+    margin-block : 1.5rem;
+  }
+`;
 
 function Description() {
   const {
     singleJobDetails
   } = (0, _react.useContext)(JobDetailsContext);
   const description = singleJobDetails?.description;
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, description);
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(JobDEscriptionStyles, {
+    dangerouslySetInnerHTML: createMarkup(description)
+  }));
 }
 
 function GoBackToSearch() {
@@ -90171,7 +90211,7 @@ function GoBackToSearch() {
     className: "backToHome"
   }, /*#__PURE__*/_react.default.createElement(_cg.CgArrowLongLeft, null), /*#__PURE__*/_react.default.createElement("small", null, "Go back to search")));
 }
-},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-icons/cg":"node_modules/react-icons/cg/index.esm.js","react-icons/io":"node_modules/react-icons/io/index.esm.js","react-icons/bs":"node_modules/react-icons/bs/index.esm.js","./styles/JobDetailsStyles":"components/styles/JobDetailsStyles.js","../context/JobsContext":"context/JobsContext.js"}],"App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-icons/cg":"node_modules/react-icons/cg/index.esm.js","react-icons/io":"node_modules/react-icons/io/index.esm.js","react-icons/bs":"node_modules/react-icons/bs/index.esm.js","./styles/JobDetailsStyles":"components/styles/JobDetailsStyles.js","../context/JobsContext":"context/JobsContext.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js"}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

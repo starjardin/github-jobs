@@ -7,6 +7,7 @@ import { BsClock } from 'react-icons/bs'
 
 import JobDetailsStyles from './styles/JobDetailsStyles'
 import { API_URL, CORS_KEY } from '../context/JobsContext'
+import styled from 'styled-components'
 
 export default function JobDetails() {
   const [singleJobDetails, setSingleJobDetails] = useState({})
@@ -20,7 +21,7 @@ export default function JobDetails() {
       })
   }
 
-  // ?markdown=true
+  // 
 
   useEffect(() => {
     getJobsData()
@@ -31,11 +32,11 @@ export default function JobDetails() {
       {!singleJobDetails.title
         ? <h2>Loading...</h2>
         : <JobDetailsStyles>
-            <div>
+            <div className="left">
               <GoBackToSearch />
               <HowToApply />
             </div>
-            <div>
+            <div className="right">
               <JobHeader />
               <Description />
             </div>
@@ -65,9 +66,7 @@ function JobHeader () {
   const timeDifference = timeNow - time
   let dateDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24)) + " " + `days ago`
   if (dateDifference < 1) {
-    dateDifference  = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`
-  } else if (dateDifference < Math.round(timeDifference / (1000 * 60))) {
-    dateDifference = Math.round(timeDifference * (1000 * 60)) ` minutes ago`
+    dateDifference = Math.round(timeDifference / (1000 * 60 * 60)) + " " + `hours ago`
   } else if (dateDifference > 1 || dateDifference < 31) {
     dateDifference = Math.round(timeDifference * (1000 * 60 * 60 * 24 * 30)) ` months ago`
   }
@@ -97,15 +96,29 @@ function JobHeader () {
   )
 }
 
+function createMarkup(jsonHtml) {
+  return {__html : jsonHtml }
+}
+
 function HowToApply() {
   const { singleJobDetails } = useContext(JobDetailsContext)
   return (
     <>
       <h4 className="howToApply">How to apply</h4>
-      <p>{singleJobDetails?.how_to_apply}</p>
+      <p dangerouslySetInnerHTML={createMarkup(singleJobDetails.how_to_apply)} />
     </>
   )
 }
+
+const JobDEscriptionStyles = styled.div`
+  p {
+    margin-block : .5rem;
+  }
+
+  h2 {
+    margin-block : 1.5rem;
+  }
+`
 
 function Description() {
   const { singleJobDetails } = useContext(JobDetailsContext)
@@ -113,7 +126,7 @@ function Description() {
 
   return (
     <>
-      {description}
+      <JobDEscriptionStyles dangerouslySetInnerHTML={createMarkup(description)} />
     </>
   )
 }

@@ -53,7 +53,8 @@ const JobDetailsStyles = styled.div`
     padding-block : 1rem;
   }
   @media (min-width : 720px) {
-    display : flex;
+    display : grid;
+    grid-template-columns : 1fr 3fr;
     h2, .backToHome {
       padding : 0;
     }
