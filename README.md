@@ -78,9 +78,9 @@ Template for your readme :
 Introduce your projects by taking a screenshot or a gif. Try to tell visitors a story about your project by answering:
 
 -   You can see the demo of this app by clicking this following link <a href="https://github-jobs-tanteli.netlify.app/">Demo</a>
--   What was your experience?
--   In a few sentences, explain the structure of your project.
--   If you had more time, what area of your project would you improve?
+-   In this project, I can say tones of things but I will make long story short. First, it was very challenging and enjoyable, at least for me. The most challenging part was to get used to the dispatch and reducer fuctions. There were lots of discoveries during the project such as I learned using axios, which I knew a little before and now I know more than I did. This part of the job description in which we get a string of html is also a fun one, there we had to do lots of researches to get it work in normal html.
+-   In a few sentences, I am going to explain breifly about my project. To start with, the project was not perfectly done, however, some of the features are working fine. One thing that I am not really satified and I am really sad that I did not get was the loading state while the data fetching is still busy, however some of them are working such as in the page first load, the loading state is showing but when you start searching, the laoding state does not show.
+-   If I had more time, I would definitely improve my this project. First thing I would start thinking about is the loading state because I am not happy with it. Secondly, I would start making some of the styles a bit better. And finally, I would give it a try with the optional part which are the paginations and the job searching depending on the nearest city where you are. I haven't done it nor have I given it a try but I think with in a lot of research, it would be doable.
 -   Did you learn anything new while working on this project?
 -   What was the most challenging part for you?
 -   Any other comments?
