@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 
+//styles for the job details page.
 const JobDetailsStyles = styled.div`
   color : #334680;
   gap : 3rem;

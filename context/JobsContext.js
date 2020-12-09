@@ -2,6 +2,8 @@ import React, { createContext, useEffect, useReducer } from 'react'
 import axios from 'axios'
 
 const GlobalContext = createContext()
+
+//these are the initial states of the app
 const initialState = {
   description: "python",
   location: "",
@@ -15,6 +17,7 @@ const initialState = {
   id : ""
 }
 
+//here are the actions that are going to happen in the app. Just to make clear so we do not hard coding them
 export const ACTIONS = {
   LOADING_STATE: "loading state",
   FETCH_ERROR : "fetch_error",
@@ -24,9 +27,11 @@ export const ACTIONS = {
   SEARCH_BY_FULL_TIME_JOB : "search_full_time_job",
 }
 
+//basic urls
 export const API_URL = "https://jobs.github.com/"
 export const CORS_KEY = "https://cors-anywhere.herokuapp.com/"
 
+//function reducer
 function reducer(state, action) {
   switch (action.type) {
     case ACTIONS.LOADING_STATE : {
@@ -88,6 +93,7 @@ function reducer(state, action) {
 function JobsContextProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  //this function is getting all the jobs
   function getJobsData() {
     axios
       .get(CORS_KEY + API_URL + `positions.json?description=${state.description}&location=${state.location}`)
@@ -99,6 +105,7 @@ function JobsContextProvider({ children }) {
       })
   }
 
+  //searching for jobs by key words, use this function
   function getJobsDataByKeyWords() {
     axios
       .get(CORS_KEY + API_URL + `positions.json?search=${state.search}`)
@@ -111,6 +118,7 @@ function JobsContextProvider({ children }) {
     return state.loading = true
   }
 
+  //searching for jobs that are full time. use this function
   function getFulltimeJobs() {
     axios
       .get(CORS_KEY + API_URL + `positions.json?description=${state.description}&full_time=${state.full_time}&location=${state.location}`)
@@ -122,6 +130,7 @@ function JobsContextProvider({ children }) {
       })
   }
 
+  //fetch data when the app loads
   useEffect(() => {
     getJobsData()
   }, [])
@@ -142,6 +151,7 @@ function JobsContextProvider({ children }) {
     getJobsDataByKeyWords()
   }, [state.search])
 
+  // here we return our value that are going to be shared in other components
   return (
     <GlobalContext.Provider value={{state, dispatch }}>
       { children }

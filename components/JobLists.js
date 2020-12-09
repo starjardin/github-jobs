@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { IoMdGlobe } from 'react-icons/io'
 import { BsClock } from 'react-icons/bs'
 
+//Basic style for the job lists
 const JobListsStyles = styled.ul`
   padding : 0;
   a {
@@ -60,6 +61,7 @@ const JobListsStyles = styled.ul`
 `
 
 export default function JobLists({ job }) {
+  //these following operations are handling the date of the jobs
   const date = new Date(job.created_at)
   const time = date.getTime()
   const timeNow = Date.now()

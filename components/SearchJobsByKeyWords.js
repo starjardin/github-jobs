@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { BsBag } from 'react-icons/bs'
 import { GlobalContext, ACTIONS } from '../context/JobsContext'
 
+//styles of the form
 const FormSearchByKeyWords = styled.form`
   display : flex;
   justify-content : space-between;
@@ -38,10 +39,11 @@ const FormSearchByKeyWords = styled.form`
 export default function SearchJobsByKeyWords() {
   const { state, dispatch } = useContext(GlobalContext)
   const [jobsByKeyWords, setJobsByKeyWords] = useState('')
-
+  //this function will handle the key words that you are typing and will do the fetch in the dispatch
   function handleSearchSubmit(e) {
     e.preventDefault()
     dispatch({ type: ACTIONS.SEARCH_JOB_BY_KEY_WORDS, foundJobsByKeyWords: jobsByKeyWords })
+    //clear the input after you submit
     setJobsByKeyWords('')
   }
   

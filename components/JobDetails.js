@@ -98,10 +98,12 @@ function JobHeader () {
   )
 }
 
+//this function is to transform html string to normal html
 function createMarkup(jsonHtml) {
   return {__html : jsonHtml }
 }
 
+//styles for the how to apply components
 const HowToApplyStyles = styled.div`
   a {
     overflow-wrap: break-word;

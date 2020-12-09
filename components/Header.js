@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+//style for the header
 const HeaderStyles = styled.h1`
   .strong {
     font-weight: 900;

@@ -35788,6 +35788,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//style for the header
 const HeaderStyles = _styledComponents.default.h1`
   .strong {
     font-weight: 900;
@@ -37400,7 +37401,8 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-const GlobalContext = (0, _react.createContext)();
+const GlobalContext = (0, _react.createContext)(); //these are the initial states of the app
+
 exports.GlobalContext = GlobalContext;
 const initialState = {
   description: "python",
@@ -37413,7 +37415,8 @@ const initialState = {
   loading: true,
   error: "",
   id: ""
-};
+}; //here are the actions that are going to happen in the app. Just to make clear so we do not hard coding them
+
 const ACTIONS = {
   LOADING_STATE: "loading state",
   FETCH_ERROR: "fetch_error",
@@ -37421,11 +37424,13 @@ const ACTIONS = {
   SEARCH_JOB_BY_LOCATION: "search_job_by_loaction",
   SEARCH_JOB_BY_GIVEN_LOCATION: "search_job_by_given_loaction",
   SEARCH_BY_FULL_TIME_JOB: "search_full_time_job"
-};
+}; //basic urls
+
 exports.ACTIONS = ACTIONS;
 const API_URL = "https://jobs.github.com/";
 exports.API_URL = API_URL;
-const CORS_KEY = "https://cors-anywhere.herokuapp.com/";
+const CORS_KEY = "https://cors-anywhere.herokuapp.com/"; //function reducer
+
 exports.CORS_KEY = CORS_KEY;
 
 function reducer(state, action) {
@@ -37497,7 +37502,7 @@ function reducer(state, action) {
 function JobsContextProvider({
   children
 }) {
-  const [state, dispatch] = (0, _react.useReducer)(reducer, initialState);
+  const [state, dispatch] = (0, _react.useReducer)(reducer, initialState); //this function is getting all the jobs
 
   function getJobsData() {
     _axios.default.get(CORS_KEY + API_URL + `positions.json?description=${state.description}&location=${state.location}`).then(response => {
@@ -37510,7 +37515,8 @@ function JobsContextProvider({
         type: "FETCH_ERROR"
       });
     });
-  }
+  } //searching for jobs by key words, use this function
+
 
   function getJobsDataByKeyWords() {
     _axios.default.get(CORS_KEY + API_URL + `positions.json?search=${state.search}`).then(response => {
@@ -37525,7 +37531,8 @@ function JobsContextProvider({
     });
 
     return state.loading = true;
-  }
+  } //searching for jobs that are full time. use this function
+
 
   function getFulltimeJobs() {
     _axios.default.get(CORS_KEY + API_URL + `positions.json?description=${state.description}&full_time=${state.full_time}&location=${state.location}`).then(response => {
@@ -37538,7 +37545,8 @@ function JobsContextProvider({
         type: "FETCH_ERROR"
       });
     });
-  }
+  } //fetch data when the app loads
+
 
   (0, _react.useEffect)(() => {
     getJobsData();
@@ -37554,7 +37562,8 @@ function JobsContextProvider({
   }, [state.full_time]);
   (0, _react.useEffect)(() => {
     getJobsDataByKeyWords();
-  }, [state.search]);
+  }, [state.search]); // here we return our value that are going to be shared in other components
+
   return /*#__PURE__*/_react.default.createElement(GlobalContext.Provider, {
     value: {
       state,
@@ -68777,6 +68786,7 @@ var _bs = require("react-icons/bs");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//Basic style for the job lists
 const JobListsStyles = _styledComponents.default.ul`
   padding : 0;
   a {
@@ -68835,6 +68845,7 @@ const JobListsStyles = _styledComponents.default.ul`
 function JobLists({
   job
 }) {
+  //these following operations are handling the date of the jobs
   const date = new Date(job.created_at);
   const time = date.getTime();
   const timeNow = Date.now();
@@ -68882,6 +68893,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+//styles of the form
 const FormSearchByKeyWords = _styledComponents.default.form`
   display : flex;
   justify-content : space-between;
@@ -68919,14 +68931,15 @@ function SearchJobsByKeyWords() {
     state,
     dispatch
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
-  const [jobsByKeyWords, setJobsByKeyWords] = (0, _react.useState)('');
+  const [jobsByKeyWords, setJobsByKeyWords] = (0, _react.useState)(''); //this function will handle the key words that you are typing and will do the fetch in the dispatch
 
   function handleSearchSubmit(e) {
     e.preventDefault();
     dispatch({
       type: _JobsContext.ACTIONS.SEARCH_JOB_BY_KEY_WORDS,
       foundJobsByKeyWords: jobsByKeyWords
-    });
+    }); //clear the input after you submit
+
     setJobsByKeyWords('');
   }
 
@@ -68959,6 +68972,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+//style of the full time job search
 const FullTimeJobSearchStyles = _styledComponents.default.div` 
   display : flex;
   flex-direction : row-reverse;
@@ -68971,7 +68985,7 @@ function FullTimeJobSearch() {
     state,
     dispatch
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
-  const [fullTimeJobIsChecked, setFullTimeJobIsChecked] = (0, _react.useState)(state.full_time);
+  const [fullTimeJobIsChecked, setFullTimeJobIsChecked] = (0, _react.useState)(state.full_time); //this following function is responsible for watching if the checbox of full time job is checked and do the fetch.
 
   function handleSearchFullTimeJob(e) {
     setFullTimeJobIsChecked(!fullTimeJobIsChecked);
@@ -69014,6 +69028,7 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+//styles for the form search by locations
 const FormStyles = _styledComponents.default.form`
   .inputs {
     display : flex;
@@ -69065,8 +69080,9 @@ function SearchJobsByLocation() {
     dispatch
   } = (0, _react.useContext)(_JobsContext.GlobalContext);
   const [jobsByLocation, setJobsByLocation] = (0, _react.useState)('');
-  const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)(state.location);
-  const cities = ["london", "San Fransisco", "Berlin", "new york"];
+  const [jobsByGivenLocation, setJobsByGivenLocation] = (0, _react.useState)(state.location); //the following array is just some cities that I picked, I will make checkbox off them later
+
+  const cities = ["london", "San Fransisco", "Berlin", "new york"]; //this function is responsible for srtting the locations
 
   function handleSearchJobsByLocation(e) {
     e.preventDefault();
@@ -90014,6 +90030,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//styles for the job details page.
 const JobDetailsStyles = _styledComponents.default.div`
   color : #334680;
   gap : 3rem;
@@ -90172,13 +90189,15 @@ function JobHeader() {
   }), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h4", null, singleJobDetails.company), /*#__PURE__*/_react.default.createElement("div", {
     className: "icon"
   }, /*#__PURE__*/_react.default.createElement(_io.IoMdGlobe, null), /*#__PURE__*/_react.default.createElement("small", null, singleJobDetails.location)))));
-}
+} //this function is to transform html string to normal html
+
 
 function createMarkup(jsonHtml) {
   return {
     __html: jsonHtml
   };
-}
+} //styles for the how to apply components
+
 
 const HowToApplyStyles = _styledComponents.default.div`
   a {

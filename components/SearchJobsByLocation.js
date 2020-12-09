@@ -5,6 +5,7 @@ import { IoMdGlobe } from 'react-icons/io'
 import { GlobalContext, ACTIONS } from '../context/JobsContext'
 import FullTimeJobSearch from './FullTimeJobSearch'
 
+//styles for the form search by locations
 const FormStyles = styled.form`
   .inputs {
     display : flex;
@@ -54,8 +55,10 @@ export default function SearchJobsByLocation() {
   const { state, dispatch } = useContext(GlobalContext)
   const [jobsByLocation, setJobsByLocation] = useState('')
   const [jobsByGivenLocation, setJobsByGivenLocation] = useState(state.location)
+  //the following array is just some cities that I picked, I will make checkbox off them later
   const cities = ["london", "San Fransisco", "Berlin", "new york"]
 
+  //this function is responsible for srtting the locations
   function handleSearchJobsByLocation(e) {
     e.preventDefault()
     dispatch({
